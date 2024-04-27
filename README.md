@@ -1,7 +1,7 @@
 # Cloud Seeder by IPv6rs
 ### Easy One-click server appliances opening up self hosting to everyone.
 
-Cloud Seeder by IPv6rs is a one-click server appliance wizard. It takes a highly opinionated approach to using container technology by deploying fat containers as isolated server appliances.
+[Cloud Seeder](https://ipv6.rs/cloudseeder/) by IPv6rs is a one-click server appliance wizard. It takes a highly opinionated approach to using container technology by deploying fat containers as isolated server appliances.
 
 **Of course it's open source.**
 
