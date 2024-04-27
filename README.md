@@ -157,7 +157,7 @@ software is doing for that matter -- our transparency in this process is our way
 
 We chose GoLang as the programming language to benefit from its cross-platform ability as well as small binary form factor versus, for example, nodeJS.
 
-Additionally, we built a [Configurator](https//github.com/ipv6rslimited/configurator) which automatically generates a user-interface from a JSON file to run a script. We felt this would
+Additionally, we built a [Configurator](https://github.com/ipv6rslimited/configurator) which automatically generates a user-interface from a JSON file to run a script. We felt this would
 be useful to other developers, so this has been separated as its own module which you can build and distribute with your own application subject to the open source license. This will
 improve over time.
 
