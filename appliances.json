@@ -1,0 +1,163 @@
+[
+  {
+    "title": "Mastodon",
+    "version": 1,
+    "description": "Mastadon is the most popular ActivityPub fediverse implementation.\n\nIt is compatible with Meta's Threads.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/mastodon/config.json"
+  },
+  {
+    "title": "Ollama OpenWeb-UI",
+    "version": 1,
+    "description": "Ollama and OpenWeb-UI gives you an AI LLM to chat with locally and remotely.\n\nChat confidentially without a middleman.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP\n- Ollama running on the host computer\n- OLLAMA_HOST set to 0.0.0.0\n- See https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server",
+    "action": "~/.ipv6rs/appliances/ollamaweb/config.json"
+  },
+  {
+    "title": "Nextcloud",
+    "version": 1,
+    "description": "Nextcloud is an all-in-one self-hosted Cloud Drive, Cloud Office.\n\nReally, Cloud Everything.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/nextcloud/config.json"
+  },
+  {
+    "title": "code-server",
+    "version": 1,
+    "description": "code-server by coder.com is VS Code in your browser.\n\nCode from anywhere, on any device - even tablets.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/codeserver/config.json"
+  },
+  {
+    "title": "Wordpress",
+    "version": 1,
+    "description": "Wordpress is the most popular blogging platform.\n\nIt powers the majority of the web.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/wordpress/config.json"
+  },
+  {
+    "title": "Ghost",
+    "version": 1,
+    "description": "Ghost is a new age blogging and newsletter subscription platform.\n\nMake money writing.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/ghost/config.json"
+  },
+  {
+    "title": "Lemmy",
+    "version": 1,
+    "description": "Lemmy is a federated social link aggregator, social network and voting platform.\n\nBreak free of centralization!",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/lemmy/config.json"
+  },
+  {
+    "title": "RocketChat",
+    "version": 1,
+    "description": "RocketChat is a team chat that is self-hosted and truly private.\n\nWhy would you want a rich organization who could execute your ideas looking at your ideas?",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/rocketchat/config.json"
+  },
+  {
+    "title": "Vaultwarden",
+    "version": 1,
+    "description": "Vaultwarden is a password manager that you can self host. It is powered by Bitwarden and is the unofficial rust implementation thereof.\n\nKeep your passwords with you.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/vaultwarden/config.json"
+  },
+  {
+    "title": "Bluesky",
+    "version": 1,
+    "description": "Bluesky is a federated social networking system using the AT protocol.\n\nIt's endorsed by Jack Dorsey.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP\n\n- Runs in privileged mode!",
+    "action": "~/.ipv6rs/appliances/bluesky/config.json"
+  },
+  {
+    "title": "Mail",
+    "version": 1,
+    "description": "E-mail server powered by Postfix and Dovecot, the leading Mail systems.\n\nSend and receive e-mail.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP\n- MX record",
+    "action": "~/.ipv6rs/appliances/mail/config.json"
+  },
+  {
+    "title": "Stalwart Mail",
+    "version": 1,
+    "description": "E-mail server powered by Stalwart, a 21st century mail system.\n\nTry the new way of running an email server.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP\n- MX record",
+    "action": "~/.ipv6rs/appliances/stalwart/config.json"
+  },
+  {
+    "title": "Jellyfin",
+    "version": 1,
+    "description": "Jellyfin helps you access your home media library from anywhere.\n\nWatch what you want, when you want, where you want.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/jellyfin/config.json"
+  },
+  {
+    "title": "PeerTube",
+    "version": 1,
+    "description": "PeerTube let's you run your own *Tube in the decentralized and federated internet.\n\nDon't get deplatformed while building your viewerbase.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/peertube/config.json"
+  },
+  {
+    "title": "Immich",
+    "version": 1,
+    "description": "Immich is a self hosted Images/Photos platform by Alex Tran. This is the Native install by arter97\n\nIt's powerful.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/immich/config.json"
+  },
+  {
+    "title": "Planka",
+    "version": 1,
+    "description": "A Kanban style To Do board that's completely open source.\n\nDon't trust your data with a third party todo provider.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/planka/config.json"
+  },
+  {
+    "title": "XMPP",
+    "version": 1,
+    "description": "XMPP, also known as Jabber, is a federated and decentralized messaging platform.\n\nChat privately with your group.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record for conference.*, upload.*, turn.*, proxy.* and the domain itself pointed to your IPv6rs IP\n- DNS A record for the same pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/xmpp/config.json"
+  },
+  {
+    "title": "YaCy",
+    "version": 1,
+    "description": "YaCy ios a decentralized, peer to peer search engine without a central authority.\n\nSay goodbye to censorship.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/yacy/config.json"
+  },
+  {
+    "title": "Gitlab",
+    "version": 1,
+    "description": "Gitlab is a software repository and foundry. This is their community edition.\n\nLiberate your codebase.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/gitlab/config.json"
+  },
+  {
+    "title": "Minecraft",
+    "version": 1,
+    "description": "Minecraft is a popular game where you can build and play with friends.\n\nThis is their server that lets you do just that.",
+    "requirements": "Requires:\n\n- Minecraft game.",
+    "action": "~/.ipv6rs/appliances/minecraft/config.json"
+  },
+  {
+    "title": "Navidrome",
+    "version": 1,
+    "description": "Navidrome gives you access to your home music library anywhere and from any device.\n\nListen under your direction.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/navidrome/config.json"
+  },
+  {
+    "title": "LAMP",
+    "version": 1,
+    "description": "LAMP, or Linux Apache, MySQL, PHP, server appliance running Ubuntu 22.04 LTS.\n\nBuild on!",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration",
+    "action": "~/.ipv6rs/appliances/lamp/config.json"
+  },
+  {
+    "title": "Base",
+    "version": 1,
+    "description": "Vanilla server appliance running Ubuntu 22.04 LTS.\n\nIt's the most popular Linux Desktop OS!",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration",
+    "action": "~/.ipv6rs/appliances/base/config.json"
+  }
+]

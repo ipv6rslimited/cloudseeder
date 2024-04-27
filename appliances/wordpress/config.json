@@ -1,0 +1,70 @@
+{
+  "Header": "Cloud Seeder by IPv6rs - WordPress Appliance",
+  "Entries": [
+    {
+      "VariableName": "_NAME",
+      "Question": "What's the name of this appliance?",
+      "CanBeNull": false,
+      "AcceptableAnswers": [],
+      "AllowedChars": "^[a-zA-Z0-9]+$",
+      "MinLength": 4,
+      "MaxLength": 16,
+      "Type":"string",
+      "Placeholder": "wordpress"
+    },
+    {
+      "VariableName": "_PASSWORD",
+      "Question": "What's the root password?",
+      "CanBeNull": false,
+      "AcceptableAnswers": [],
+      "AllowedChars": "^[a-zA-Z0-9!@#$%^&*()-_+=`~,<.>?;:]+$",
+      "MinLength": 4,
+      "MaxLength": 32,
+      "Type":"password",
+      "Placeholder": "Enter password"
+    },
+    {
+      "VariableName": "_SERVERNAME",
+      "Question": "What's the domain name for this WordPress?",
+      "CanBeNull": false,
+      "AcceptableAnswers": [],
+      "AllowedChars": "^[a-zA-Z0-9._-]+$",
+      "MinLength": 3,
+      "MaxLength": 48,
+      "Type":"string",
+      "Placeholder": "domain.com"
+    },
+    {
+      "VariableName": "_SERVERALIAS",
+      "Question": "What's the alias for this WordPress?",
+      "CanBeNull": false,
+      "AcceptableAnswers": [],
+      "AllowedChars": "^[a-zA-Z0-9._-]+$",
+      "MinLength": 3,
+      "MaxLength": 48,
+      "Type":"string",
+      "Placeholder": "www.domain.com"
+    },
+    {
+      "VariableName": "_EMAIL",
+      "Question": "What's your email for LetsEncrypt?",
+      "CanBeNull": false,
+      "AcceptableAnswers": [],
+      "AllowedChars": "^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+$",
+      "MinLength": 3,
+      "MaxLength": 48,
+      "Type":"string",
+      "Placeholder": "me@domain.com"
+    },
+    {
+      "VariableName": "_WG",
+      "Question": "IPv6rs WireGuard Configuration:",
+      "CanBeNull": false,
+      "Type":"string",
+      "AcceptableAnswers": ["conf"],
+      "Placeholder": "FILEPICKER"
+    }
+  ],
+  "SubmitButtonText": "Create",
+  "exec": "~/.ipv6rs/appliances/wordpress/install.sh"
+}
