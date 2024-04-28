@@ -24,7 +24,7 @@ echo
   --env SERVERNAME="__SERVERNAME" \
   --env EMAIL="__EMAIL" \
   --name __NAME \
-  --security-opt "label=disable" \ 
+  --security-opt "label=disable" \
   localhost/stalwart:latest && podman exec __NAME bash -c /.root.sh)
 echo
 echo

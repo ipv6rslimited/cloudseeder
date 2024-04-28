@@ -16,7 +16,7 @@ echo
 echo
 echo
 
-(cd $HOME/.ipv6rs/appliances/ollamaweb/ && podman build -t ollamaweb . --no-cache && podman run -d \
+(cd $HOME/.ipv6rs/appliances/ollamaweb/ && podman build -t ollamaweb . && podman run -d \
   --cap-add=NET_ADMIN \
   --volume /sys/fs/cgroup:/sys/fs/cgroup:ro \
   --device /dev/net/tun \
@@ -25,7 +25,7 @@ echo
   --env SERVERNAME="__SERVERNAME" \
   --env EMAIL="__EMAIL" \
   --name __NAME \
-  --security-opt "label=disable" \ 
+  --security-opt "label=disable" \
   localhost/ollamaweb:latest && podman exec __NAME bash -c /.root.sh)
 echo
 echo

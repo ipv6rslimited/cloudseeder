@@ -25,7 +25,7 @@ echo
   --env EMAIL="__EMAIL" \
   --env ADMIN="__ADMIN" \
   --name __NAME \
-  --security-opt "label=disable" \ 
+  --security-opt "label=disable" \
   localhost/xmpp:latest && podman exec __NAME bash -c /.root.sh)
 echo
 echo

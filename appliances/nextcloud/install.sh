@@ -26,7 +26,7 @@ echo
   --env USERNAME="__USERNAME" \
   --env UPASSWORD="__UPASSWORD" \
   --name __NAME \
-  --security-opt "label=disable" \ 
+  --security-opt "label=disable" \
   localhost/nextcloud:latest && podman exec __NAME bash -c /.root.sh)
 echo
 echo

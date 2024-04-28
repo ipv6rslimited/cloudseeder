@@ -2,6 +2,21 @@
 TARGET_MARKER="/root/.targetonce"
 TARGET_VERSION=1
 
+
+make_admin=$(cat <<'EOF'
+#!/bin/bash
+
+echo "Enter the username:"
+read USERNAME
+
+
+echo "Enter the user email:"
+read USEREMAIL
+
+su - mastodon -c "PATH=\"\$HOME/.rbenv/bin:\$HOME/.rbenv/plugins/ruby-build/bin:\$PATH\"; cd live/bin && PATH=\"\$HOME/.rbenv/bin:\$HOME/.rbenv/shims/:\$HOME/.rbenv/plugins/ruby-build/bin:\$PATH\" RAILS_ENV=production ./tootctl accounts create $USERNAME --email=$USEREMAIL --role=Owner --confirmed --approve"
+EOF
+)
+
 env_production=$(cat <<EOF
 LOCAL_DOMAIN=$SERVERNAME
 
@@ -64,8 +79,8 @@ cp /home/mastodon/live/dist/mastodon-*.service /etc/systemd/system/
 chmod 0755 /home/mastodon
 systemctl daemon-reload
 systemctl enable --now mastodon-web mastodon-sidekiq mastodon-streaming
-su - mastodon -c "PATH=\"\$HOME/.rbenv/bin:\$HOME/.rbenv/plugins/ruby-build/bin:\$PATH\" cd live/bin && PATH=\"\$HOME/.rbenv/bin:\$HOME/.rbenv/shims/:\$HOME/.rbenv/plugins/ruby-build/bin:\$PATH\" RAILS_ENV=production ./tootctl accounts create $USERNAME --email=$USEREMAIL --role=Owner --confirmed --approve" > /root/mastodon_admin.confidential
-chmod 0600 /root/mastodon_admin.confidential
+echo "$make_admin" > /root/make_admin.sh
+chmod u+x /root/make_admin.sh
 
 echo "$TARGET_VERSION" > "${TARGET_MARKER}"
 chattr +i "${TARGET_MARKER}"

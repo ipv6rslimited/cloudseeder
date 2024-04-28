@@ -28,7 +28,7 @@ echo
   --env ADMINNAME="__ADMINNAME" \
   --env EMAIL="__EMAIL" \
   --name __NAME \
-  --security-opt "label=disable" \ 
+  --security-opt "label=disable" \
   localhost/planka:latest && podman exec __NAME bash -c /.root.sh)
 echo
 echo

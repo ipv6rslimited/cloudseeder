@@ -21,8 +21,6 @@ echo
   --device /dev/net/tun \
   --env ROOT_PASSWORD="__PASSWORD" \
   --env WGCONFIG="$(cat __WG | tr '\n' '%')" \
-  --env USERNAME="__USERNAME" \
-  --env USEREMAIL="__USEREMAIL" \
   --env SERVERNAME="__SERVERNAME" \
   --env EMAIL="__EMAIL" \
   --name __NAME \
@@ -50,6 +48,6 @@ echo To enter your VM type: podman exec -it __NAME /bin/bash
 echo You can enable an ssh server by typing: systemctl enable --now ssh
 echo
 echo Get your root password from the root folder by typing:
-echo cat /root/mastodon_admin.confidential
+echo ./make_admin.sh
 echo
 echo

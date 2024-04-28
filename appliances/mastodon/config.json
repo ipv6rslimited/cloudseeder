@@ -35,28 +35,6 @@
       "Placeholder": "domain.com"
     },
     {
-      "VariableName": "_USERNAME",
-      "Question": "What's the admin username going to be on this Mastodon?",
-      "CanBeNull": false,
-      "AcceptableAnswers": [],
-      "AllowedChars": "^[a-zA-Z0-9]+$",
-      "MinLength": 8,
-      "MaxLength": 16,
-      "Type":"string",
-      "Placeholder": "somename"
-    },
-    {
-      "VariableName": "_USEREMAIL",
-      "Question": "What's the email for this admin user?",
-      "CanBeNull": false,
-      "AcceptableAnswers": [],
-      "AllowedChars": "^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+$",
-      "MinLength": 3,
-      "MaxLength": 48,
-      "Type":"string",
-      "Placeholder": "somename@domain.com"
-    },
-    {
       "VariableName": "_EMAIL",
       "Question": "What's your email for LetsEncrypt?",
       "CanBeNull": false,
