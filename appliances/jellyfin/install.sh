@@ -23,7 +23,7 @@ echo
   --env WGCONFIG="$(cat __WG | tr '\n' '%')" \
   --env SERVERNAME="__SERVERNAME" \
   --env EMAIL="__EMAIL" \
-  --volume __FOLDER:/media:rw \
+  --volume "__FOLDER:/media:rw" \
   --name __NAME \
   --security-opt "label=disable" \
   localhost/jellyfin:latest && podman exec __NAME bash -c /.root.sh)

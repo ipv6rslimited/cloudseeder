@@ -23,7 +23,7 @@ echo
   --env WGCONFIG="$(cat __WG | tr '\n' '%')" \
   --env SERVERNAME="__SERVERNAME" \
   --env EMAIL="__EMAIL" \
-  --volume __FOLDER:/home/navidrome/music:rw \
+  --volume "__FOLDER:/home/navidrome/music:rw" \
   --name __NAME \
   --security-opt "label=disable" \
   localhost/navidrome:latest && podman exec __NAME bash -c /.root.sh)
