@@ -139,6 +139,7 @@ func main() {
     go func() {
       cmd := exec.Command(trayPath)
       setSysProcAttr(cmd)
+      setCommandNoWindow(cmd)
 
       err := cmd.Start()
       if err != nil {

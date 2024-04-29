@@ -17,11 +17,18 @@ package main
 import (
   "os/exec"
   "syscall"
+  "golang.org/x/sys/windows"
 )
 
 
 func setSysProcAttr(cmd *exec.Cmd) {
   cmd.SysProcAttr = &syscall.SysProcAttr{
     CreationFlags: syscall.CREATE_NEW_PROCESS_GROUP,
+  }
+}
+
+func setCommandNoWindow(cmd *exec.Cmd) {
+  cmd.SysProcAttr = &windows.SysProcAttr{
+    CreationFlags: windows.CREATE_NO_WINDOW,
   }
 }

@@ -25,3 +25,6 @@ func setSysProcAttr(cmd *exec.Cmd) {
     Setpgid: true,
   }
 }
+
+func setCommandNoWindow(cmd *exec.Cmd) {
+}

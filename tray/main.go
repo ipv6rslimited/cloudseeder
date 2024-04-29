@@ -120,6 +120,8 @@ func runChecker() {
 
 func getInitialContainerState() {
   cmd := exec.Command(getPodmanExecutable(), "ps", "--all", "--format", "json")
+  tray.SetCommandNoWindow(cmd)
+
   output, err := cmd.Output()
   if err != nil {
     fmt.Println("Failed to get initial container states:", err)
@@ -402,6 +404,7 @@ func createShellCommandItem(containerName string) UIItem {
     Title: "Shell",
     Exec:  getShellCommand(containerName),
     Icon:  "ComputerIcon",
+    Hide:  true,
   }
 }
 
