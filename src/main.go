@@ -1,4 +1,4 @@
-/*
+/* 
 **
 ** main
 ** Provides a launcher interface for Cloud Seeder by IPv6rs
@@ -21,6 +21,7 @@ import (
   "fyne.io/fyne/v2/container"
   "fyne.io/fyne/v2/driver/desktop"
   "fyne.io/fyne/v2/layout"
+  "fyne.io/fyne/v2/theme"
   "fyne.io/fyne/v2/widget"
   "path/filepath"
   "io/ioutil"
@@ -35,6 +36,7 @@ import (
 
 type ApplianceInfo struct {
   Title        string `json:"title"`
+  Short        string `json:"short"`
   Description  string `json:"description"`
   Requirements string `json:"requirements"`
   Action       string `json:"action"`
@@ -48,6 +50,7 @@ var (
 func main() {
   myApp := app.New()
   exists := checkBinaryExists("podman")
+  myApp.Settings().SetTheme(theme.LightTheme())
 
   if !exists {
     createDialogWindow(myApp, "You must install podman to use Cloud Seeder by IPv6rs","OK")
@@ -122,7 +125,7 @@ func main() {
       if err != nil {
         log.Fatal(err)
       }
-      updateUI(myApp, myWindow)
+      updateUI(myApp, myWindow, configPath)
       time.Sleep(1 * time.Second)
 
       splashWindow.Close()
@@ -157,33 +160,38 @@ func main() {
   }
 }
 
-func updateUI(app fyne.App, window fyne.Window) {
+func updateUI(app fyne.App, window fyne.Window, configPath string) {
   cards := make([]fyne.CanvasObject, 0)
 
   for _, info := range applianceInfos {
-    card := createApplianceCard(app, window, info)
+    card := createApplianceCard(app, window, info, configPath)
     cards = append(cards, card)
   }
 
-  cardSize := fyne.NewSize(250, 200)
+  cardSize := fyne.NewSize(250, 320)
   applianceGrid := container.NewGridWrap(cardSize, cards...)
   scrollContainer := container.NewScroll(applianceGrid)
 
   window.SetContent(scrollContainer)
 }
 
-func createApplianceCard(app fyne.App, window fyne.Window, info ApplianceInfo) *fyne.Container {
+func createApplianceCard(app fyne.App, window fyne.Window, info ApplianceInfo, configPath string) *fyne.Container {
+  image := canvas.NewImageFromFile(filepath.Join(configPath, "appliances", info.Short, "image.png"))
+  image.FillMode = canvas.ImageFillContain
+  image.SetMinSize(fyne.NewSize(240, 100))
+
   titleLabel := widget.NewLabelWithStyle(info.Title, fyne.TextAlignCenter, fyne.TextStyle{Bold: true})
   titleLabel.Wrapping = fyne.TextWrapWord
 
   descriptionLabel := widget.NewLabelWithStyle(info.Description, fyne.TextAlignCenter, fyne.TextStyle{})
   descriptionLabel.Wrapping = fyne.TextWrapWord
 
-  content := container.NewVBox(titleLabel, descriptionLabel)
+  content := container.NewVBox(image, titleLabel, descriptionLabel)
   card := widget.NewCard("", "", content)
 
   return makeCardInteractive(app, window, card, info.Action, info.Requirements)
 }
+
 
 func loadAppliancesFromJSON(filePath string) ([]ApplianceInfo, error) {
   file, err := ioutil.ReadFile(filePath)
