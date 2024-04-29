@@ -5,6 +5,8 @@
 
 **Of course it's open source.**
 
+![Cloud Seeder Preview](https://raw.githubusercontent.com/ipv6rslimited/cloudseeder/main/preview.png)
+
 #### Preface
 
 After conducting a survey, we discovered a much larger number of people wish to self-host than the current self-hosting base today.
@@ -119,10 +121,6 @@ make
 ```
 
 The unsigned binaries should be in a folder called cloudseeder/dist upon completion.
-
-To build the installer and the dmg, you'll need `makensis` and `create-dmg` from homebrew.
-
-After making everything, you can simply cd dmg or cd exe and run package-mac/win.sh respectively.
 
 All of this has only been tested on MacOS but the build should work fine in Linux.
 
