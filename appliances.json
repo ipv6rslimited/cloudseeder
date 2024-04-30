@@ -48,12 +48,28 @@
     "action": "~/.ipv6rs/appliances/ghost/config.json"
   },
   {
+    "title": "Misskey",
+    "short": "misskey",
+    "version": 1,
+    "description": "Misskey is one of the most popular ActivityPub softwares in the world\n\nParticipate in the fediverse!",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/misskey/config.json"
+  },
+  {
     "title": "Lemmy",
     "short": "lemmy",
     "version": 1,
     "description": "Lemmy is a federated social link aggregator, social network and voting platform.\n\nBreak free of centralization!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/lemmy/config.json"
+  },
+  {
+    "title": "Pixelfed",
+    "short": "pixelfed",
+    "version": 1,
+    "description": "Pixelfed is a federated social photo sharing platform, much like your favorite gram type of site.\n\nNow you can't get deplatformed.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/pixelfed/config.json"
   },
   {
     "title": "RocketChat",
@@ -144,6 +160,14 @@
     "action": "~/.ipv6rs/appliances/yacy/config.json"
   },
   {
+    "title": "Gitea",
+    "short": "gitea",
+    "version": 1,
+    "description": "Gitea is a git repository. They have begun ActivityPub integration.\n\nThe future of social git is ActivityPub.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/gitea/config.json"
+  },
+  {
     "title": "Gitlab",
     "short": "gitlab",
     "version": 1,
@@ -158,6 +182,14 @@
     "description": "Minecraft is a popular game where you can build and play with friends.\n\nThis is their server that lets you do just that.",
     "requirements": "Requires:\n\n- Minecraft game.",
     "action": "~/.ipv6rs/appliances/minecraft/config.json"
+  },
+  {
+    "title": "Funkwhale",
+    "short": "funkwhale",
+    "version": 1,
+    "description": "Funkwhale is an ActivityPub powered music sharing platform. You can host your own music without a third party deplatforming you.\n\nPeer to peer is the way to go.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/funkwhale/config.json"
   },
   {
     "title": "Navidrome",

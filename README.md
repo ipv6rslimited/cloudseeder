@@ -62,7 +62,11 @@ There will be many more appliances supported in the future. The current list is 
 
 - [Ghost](https://github.com/TryGhost/Ghost)
 
+- [Misskey](https://misskey-hub.net/)
+
 - [Lemmy](https://join-lemmy.org/)
+
+- [Pixelfed](https://pixelfed.org/)
 
 - [RocketChat](https://rocket.chat)
 
@@ -86,9 +90,13 @@ There will be many more appliances supported in the future. The current list is 
 
 - [YaCy](https://yacy.net)
 
+- [Gitea](https://gitea.com)
+
 - [Gitlab](https://gitlab.com/gitlab-org/gitlab)
 
 - [Minecraft](https://www.minecraft.net/en-us)
+
+- [Funkwhale](https://funkwhale.audio)
 
 - [Navidrome](https://www.navidrome.org)
 

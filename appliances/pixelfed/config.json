@@ -1,5 +1,5 @@
 {
-  "Header": "Cloud Seeder by IPv6rs - Planka Appliance",
+  "Header": "Cloud Seeder by IPv6rs - Pixelfed Appliance",
   "Entries": [
     {
       "VariableName": "_NAME",
@@ -10,7 +10,7 @@
       "MinLength": 4,
       "MaxLength": 16,
       "Type":"string",
-      "Placeholder": "planka"
+      "Placeholder": "pixelfed"
     },
     {
       "VariableName": "_PASSWORD",
@@ -25,7 +25,7 @@
     },
     {
       "VariableName": "_SERVERNAME",
-      "Question": "What's the domain name for this Planka?",
+      "Question": "What's the domain name for this Pixelfed?",
       "CanBeNull": false,
       "AcceptableAnswers": [],
       "AllowedChars": "^[a-zA-Z0-9._-]+$",
@@ -36,7 +36,7 @@
     },
     {
       "VariableName": "_ADMINEMAIL",
-      "Question": "What's the admin user's email for this Planka?",
+      "Question": "What's the admin user's email for this Pixelfed?",
       "CanBeNull": false,
       "AcceptableAnswers": [],
       "AllowedChars": "^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+$",
@@ -50,20 +50,20 @@
       "Question": "What's the admin's full name?",
       "CanBeNull": false,
       "AcceptableAnswers": [],
-      "AllowedChars": "^[a-zA-Z0-9 .]+$",      
-      "MinLength": 2,      
-      "MaxLength": 32,   
+      "AllowedChars": "^[a-zA-Z0-9 .]+$",
+      "MinLength": 2,
+      "MaxLength": 32,
       "Type":"string",
       "Placeholder": "Admin Person"
     },
     {
       "VariableName": "_ADMINUSERNAME",
-      "Question": "What's the admin username for this Planka?",
+      "Question": "What's the admin username for this Pixelfed?",
       "CanBeNull": false,
       "AcceptableAnswers": [],
-      "AllowedChars": "^[a-zA-Z0-9]+$",      
-      "MinLength": 8,      
-      "MaxLength": 16,   
+      "AllowedChars": "^[a-zA-Z0-9]+$",
+      "MinLength": 8,
+      "MaxLength": 16,
       "Type":"string",
       "Placeholder": "adminuser"
     },
@@ -99,5 +99,5 @@
     }
   ],
   "SubmitButtonText": "Create",
-  "exec": "~/.ipv6rs/appliances/planka/install.sh"
+  "exec": "~/.ipv6rs/appliances/pixelfed/install.sh"
 }
