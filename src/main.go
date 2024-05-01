@@ -80,6 +80,12 @@ func main() {
       configPath = filepath.Join(homeDir, ".ipv6rs")
     }
 
+    err = os.MkdirAll(configPath, os.ModePerm)
+    if err != nil {
+      fmt.Printf("Error creating directory: %v\n", err)
+      os.Exit(1)
+    }
+
     lock, err := createLockFile(configPath)
     if err != nil {
       fmt.Printf("Error: %v\n", err)
