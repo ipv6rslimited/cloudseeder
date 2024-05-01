@@ -3,7 +3,7 @@
     "title": "Mastodon",
     "short": "mastodon",
     "version": 1,
-    "description": "Mastadon is the most popular ActivityPub fediverse implementation.\n\nIt is compatible with Meta's Threads.",
+    "description": "Mastodon is the most popular ActivityPub fediverse implementation.\n\nIt is compatible with Meta's Threads.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/mastodon/config.json"
   },
