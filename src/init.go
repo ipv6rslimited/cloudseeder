@@ -14,14 +14,26 @@ package main
 
 import (
   "runtime"
+  "encoding/json"
   "io"
   "fmt"
   "os"
   "os/exec"
+  "archive/tar"
+  "compress/gzip"
+  "net/http"
   "path/filepath"
   "log"
 )
 
+type Appliance struct {
+  Title        string `json:"title"`
+  Short        string `json:"short"`
+  Version      int    `json:"version"`
+  Description  string `json:"description"`
+  Requirements string `json:"requirements"`
+  Action       string `json:"action"`
+}
 
 func copyFile(src, dst string) error {
   sourceFileStat, err := os.Stat(src)
@@ -116,20 +128,50 @@ func setupInitialFiles() {
     if appData == "" {
       appData = filepath.Join(homeDir, "AppData", "Local")
     }
-    configPath = filepath.Join(appData, "ipv6rs", "appliances")
+    configPath = filepath.Join(appData, "ipv6rs")
   } else {
-    configPath = filepath.Join(homeDir, ".ipv6rs", "appliances")
+    configPath = filepath.Join(homeDir, ".ipv6rs")
   }
+  appliancePath := filepath.Join(configPath, "appliances")
 
-  if err := os.MkdirAll(configPath, os.ModePerm); err != nil {
+  if err := os.MkdirAll(appliancePath, os.ModePerm); err != nil {
     log.Fatalf("Failed to create directory: %v", err)
   }
 
-  srcConfigFile := filepath.Join(resourcesPath, "appliances.json")
-  destConfigFile := filepath.Join(configPath, "..", "appliances.json")
+  url := "https://raw.githubusercontent.com/ipv6rslimited/cloudseeder-appliances/main/appliances.json"
 
-  if err := copyFile(srcConfigFile, destConfigFile); err != nil {
-    log.Fatalf("Failed to copy main init file: %v", err)
+  applianceConfig, err := downloadFile(url)
+  if err != nil {
+    log.Fatalf("Unable to get the main appliance config: %v", err)
+  }
+  defer applianceConfig.Close()
+
+  buffer, err := io.ReadAll(applianceConfig)
+  if err != nil {
+    log.Fatalf("Unable to read the main appliance config: %v", err)
+  }
+
+  if err := saveDownloadedFile(buffer, filepath.Join(configPath, "appliances.json")); err != nil {
+    log.Fatalf("Unable to save the main appliance config: %v", err)
+  }
+
+  appliances, err := parseApplianceConfig(buffer)
+  if err != nil {
+    log.Fatalf("Unable to parse the main appliance config: %v", err)
+  }
+
+  if err := downloadAppliances(appliances, appliancePath); err != nil {
+    log.Fatalf("Failed to download appliances: %v", err)
+  }
+
+  sideloadedApps, err := loadJSONFile(filepath.Join(configPath, "sideload.json"))
+  if err == nil {
+    appliances = mergeAppliances(appliances, sideloadedApps)
+    if err := saveAppliances(appliances, filepath.Join(configPath, "appliances.json")); err != nil {
+      log.Fatalf("Failed to save merged appliances: %v", err)
+    }
+  } else {
+    log.Println("No sideload.json found or error reading: ", err)
   }
 
   backup := "backup"
@@ -146,9 +188,9 @@ func setupInitialFiles() {
   srcBackupFile := filepath.Join(resourcesPath, backup)
   srcCheckerFile := filepath.Join(resourcesPath, checker)
   srcUpgradeFile := filepath.Join(resourcesPath, upgrade)
-  destBackupFile := filepath.Join(configPath, "..", backup)
-  destCheckerFile := filepath.Join(configPath, "..", checker)
-  destUpgradeFile := filepath.Join(configPath, "..", upgrade)
+  destBackupFile := filepath.Join(configPath, backup)
+  destCheckerFile := filepath.Join(configPath, checker)
+  destUpgradeFile := filepath.Join(configPath, upgrade)
 
   if err := copyFile(srcBackupFile, destBackupFile); err != nil {
     log.Fatalf("Failed to copy backup file: %v", err)
@@ -175,17 +217,165 @@ func setupInitialFiles() {
     }
   }
 
-  if err := copyDir(filepath.Join(resourcesPath, "appliances"), configPath); err != nil {
-    log.Fatalf("Failed to copy files: %v", err)
-  }
-
-  iconPath := filepath.Join(configPath, "..", "icons")
+  iconPath := filepath.Join(configPath, "icons")
   if err := os.MkdirAll(iconPath, os.ModePerm); err != nil {
     log.Fatalf("Failed to create directory: %v", err)
   }
-
-
   if err := copyDir(filepath.Join(resourcesPath, "icons"), iconPath); err != nil {
     log.Fatalf("Failed to copy files: %v", err)
   }
+}
+
+func downloadFile(url string) (io.ReadCloser, error) {
+  response, err := http.Get(url)
+  if err != nil {
+    return nil, fmt.Errorf("failed to download file: %w", err)
+  }
+
+  if response.StatusCode != 200 {
+    response.Body.Close()
+    return nil, fmt.Errorf("received non-200 status code: %d", response.StatusCode)
+  }
+
+  return response.Body, nil
+}
+
+func saveDownloadedFile(data []byte, dst string) error {
+  out, err := os.Create(dst)
+  if err != nil {
+    return fmt.Errorf("failed to create file: %w", err)
+  }
+  defer out.Close()
+
+  _, err = out.Write(data)
+  if err != nil {
+    return fmt.Errorf("failed to save file: %w", err)
+  }
+  return nil
+}
+
+func parseApplianceConfig(data []byte) ([]Appliance, error) {
+  var appliances []Appliance
+  if err := json.Unmarshal(data, &appliances); err != nil {
+    return nil, fmt.Errorf("failed to decode JSON: %w", err)
+  }
+  return appliances, nil
+}
+
+func downloadAppliances(appliances []Appliance, baseDir string) error {
+  baseURL := "https://raw.githubusercontent.com/ipv6rslimited/cloudseeder-appliances/main/"
+  for _, app := range appliances {
+    fmt.Printf("Downloading and installing %s...\n", app.Title)
+    fileURL := baseURL + app.Short + ".cloudseeder"
+    tempFile := filepath.Join(os.TempDir(), app.Short+".tgz")
+
+    fileData, err := downloadFile(fileURL)
+    if err != nil {
+      log.Fatalf("Error downloading %s: %v\n", app.Title, err)
+    }
+
+    buffer, err := io.ReadAll(fileData)
+    if err != nil {
+      log.Fatalf("Error reading %s: %v\n", app.Title, err)
+    }
+    fileData.Close()
+
+    if err := saveDownloadedFile(buffer, tempFile); err != nil {
+      log.Fatalf("Error saving %s: %v\n", app.Title, err)
+      continue
+    }
+
+    extractPath := filepath.Join(baseDir)
+    if err := untarGz(tempFile, extractPath); err != nil {
+      log.Fatalf("Error extracting %s: %v\n", app.Title, err)
+      continue
+    }
+    fmt.Printf("%s downloaded and installed.\n", app.Title)
+  }
+  return nil
+}
+
+func untarGz(src, dst string) error {
+  file, err := os.Open(src)
+  if err != nil {
+    return err
+  }
+  defer file.Close()
+
+  gzr, err := gzip.NewReader(file)
+  if err != nil {
+    return err
+  }
+  defer gzr.Close()
+
+  tr := tar.NewReader(gzr)
+
+  for {
+    header, err := tr.Next()
+    switch {
+      case err == io.EOF:
+        return nil
+      case err != nil:
+        return err
+      case header == nil:
+        continue
+    }
+    target := filepath.Join(dst, header.Name)
+    switch header.Typeflag {
+      case tar.TypeDir:
+        if err := os.MkdirAll(target, 0755); err != nil {
+	  return err
+        }
+      case tar.TypeReg:
+        outFile, err := os.Create(target)
+        if err != nil {
+          return err
+        }
+        if _, err := io.Copy(outFile, tr); err != nil {
+          outFile.Close()
+          return err
+        }
+        outFile.Close()
+    }
+  }
+}
+
+func loadJSONFile(filePath string) ([]Appliance, error) {
+  var appliances []Appliance
+  file, err := os.Open(filePath)
+  if err != nil {
+    return nil, err
+  }
+  defer file.Close()
+
+  if err := json.NewDecoder(file).Decode(&appliances); err != nil {
+    return nil, err
+  }
+  return appliances, nil
+}
+
+func mergeAppliances(main, sideload []Appliance) []Appliance {
+  existing := make(map[string]int)
+  for index, app := range main {
+    existing[app.Short] = index
+  }
+  for _, app := range sideload {
+    if index, found := existing[app.Short]; found {
+      main[index] = app
+    } else {
+      main = append(main, app)
+    }
+  }
+  return main
+}
+
+func saveAppliances(appliances []Appliance, filePath string) error {
+  file, err := os.Create(filePath)
+  if err != nil {
+    return err
+  }
+  defer file.Close()
+  encoder := json.NewEncoder(file)
+  encoder.SetIndent("", "  ")
+  return encoder.Encode(appliances)
 }
