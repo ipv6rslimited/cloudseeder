@@ -23,6 +23,8 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+sleep 5
+
 echo "Fetching and executing upgrade script in $CONTAINER_NAME for $APPLIANCE_NAME to version $VERSION..."
 podman exec "$CONTAINER_NAME" sh -c "curl -fsSL 'https://raw.githubusercontent.com/ipv6rs/cloudseeder-updates/main/appliances/$APPLIANCE_NAME/$VERSION' | bash"
 if [ $? -ne 0 ]; then

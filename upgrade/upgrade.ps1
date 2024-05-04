@@ -22,6 +22,8 @@ if ($startResult.ExitCode -ne 0) {
   Exit $startResult.ExitCode
 }
 
+Start-Sleep -Seconds 5
+
 Write-Host "Fetching and executing upgrade script in $CONTAINER_NAME for $APPLIANCE_NAME to version $VERSION..."
 $curlCommand = "curl -fsSL 'https://raw.githubusercontent.com/ipv6rs/cloudseeder-updates/main/appliances/$APPLIANCE_NAME/$VERSION' | bash"
 $execResult = Start-Process -FilePath "podman" -ArgumentList "exec", $CONTAINER_NAME, "sh", "-c", "`"$curlCommand`"" -NoNewWindow -Wait -PassThru
