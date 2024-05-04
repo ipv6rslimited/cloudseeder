@@ -28,14 +28,6 @@ darwin:
 	@echo [✓] Completed
 
 	@echo [i] Finalizing Package
-	@cp -R appliances "fyne-cross/dist/darwin-arm64/${NAME}.app/Contents/Resources/"
-	@cp -R appliances "fyne-cross/dist/darwin-amd64/${NAME}.app/Contents/Resources/"
-	@cp -R appliances "fyne-cross/dist/darwin-universal/${NAME}.app/Contents/Resources/"
-
-	@cp -R appliances.json "fyne-cross/dist/darwin-arm64/${NAME}.app/Contents/Resources/"
-	@cp -R appliances.json "fyne-cross/dist/darwin-amd64/${NAME}.app/Contents/Resources/"
-	@cp -R appliances.json "fyne-cross/dist/darwin-universal/${NAME}.app/Contents/Resources/"
-
 	@cp -R upgrade/upgrade.sh "fyne-cross/dist/darwin-arm64/${NAME}.app/Contents/Resources/"
 	@cp -R upgrade/upgrade.sh "fyne-cross/dist/darwin-amd64/${NAME}.app/Contents/Resources/"
 	@cp -R upgrade/upgrade.sh "fyne-cross/dist/darwin-universal/${NAME}.app/Contents/Resources/"
@@ -90,8 +82,6 @@ linux-x86:
 	@cp -R fyne-cross/dist/linux-amd64/usr/local/bin/${SHORT_NAME} fyne-cross/dist/linux-amd64/bin
 
 	@echo [i] Finalizing Packages Appliance Data
-	@cp -R appliances fyne-cross/dist/linux-amd64/Resources/
-	@cp -R appliances.json fyne-cross/dist/linux-amd64/Resources/
 	@cp -R upgrade/upgrade.sh fyne-cross/dist/linux-amd64/Resources/
 	@mkdir -p fyne-cross/dist/linux-amd64/Resources/icons/
 	@cp -R Icon.png fyne-cross/dist/linux-amd64/Resources/icons/
@@ -139,8 +129,6 @@ linux-arm:
 	@cp -R fyne-cross/dist/linux-arm64/usr/local/bin/${SHORT_NAME} fyne-cross/dist/linux-arm64/bin
 
 	@echo [i] Finalizing Packages Appliance Data
-	@cp -R appliances fyne-cross/dist/linux-arm64/Resources/
-	@cp -R appliances.json fyne-cross/dist/linux-arm64/Resources/
 	@cp -R upgrade/upgrade.sh fyne-cross/dist/linux-arm64/Resources/
 	@mkdir -p fyne-cross/dist/linux-arm64/Resources/icons/
 	@cp -R Icon.png fyne-cross/dist/linux-arm64/Resources/icons/
@@ -188,8 +176,6 @@ windows-x86:
 	@mv fyne-cross/dist/windows-amd64/${CURRENT_FOLDER}.exe fyne-cross/dist/windows-amd64/bin/${SHORT_NAME}.exe
 
 	@echo [i] Finalizing Packages Appliance Data
-	@cp -R appliances fyne-cross/dist/windows-amd64/Resources/
-	@cp -R appliances.json fyne-cross/dist/windows-amd64/Resources/
 	@cp -R upgrade/upgrade.ps1 fyne-cross/dist/windows-amd64/Resources/
 	@mkdir -p fyne-cross/dist/windows-amd64/Resources/icons/
 	@cp -R Icon.png fyne-cross/dist/windows-amd64/Resources/icons/
@@ -228,8 +214,6 @@ windows-arm:
 	@mv fyne-cross/dist/windows-arm64/${CURRENT_FOLDER}.exe fyne-cross/dist/windows-arm64/bin/${SHORT_NAME}.exe
 
 	@echo [i] Finalizing Packages Appliance Data
-	@cp -R appliances fyne-cross/dist/windows-arm64/Resources/
-	@cp -R appliances.json fyne-cross/dist/windows-arm64/Resources/
 	@cp -R upgrade/upgrade.ps1 fyne-cross/dist/windows-arm64/Resources/
 	@mkdir -p fyne-cross/dist/windows-arm64/Resources/icons/
 	@cp -R Icon.png fyne-cross/dist/windows-arm64/Resources/icons/
