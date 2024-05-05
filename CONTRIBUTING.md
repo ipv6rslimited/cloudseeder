@@ -41,17 +41,6 @@ Improvements to documentation are as welcome as code changes. If you notice erro
 - Help in testing and validating bug fixes or new features is crucial.
 - If you want to contribute by writing tests or enhancing our testing infrastructure, please submit pull requests with your code.
 
-## Pull Request Process
-
-1. Ensure any install or build dependencies are removed before the end of the layer when doing a build.
-
-2. Update the README.md or any relevant documentation with details of changes to the interface, this includes new environment variables, exposed ports, useful file locations, or container parameters.
-
-3. Increase the version numbers in any examples files and the README.md to the new version that this Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
-
-4. You may merge the Pull Request once you have the sign-off of two other developers, or if you do not have permission to do that, you may request the second reviewer to merge it for you.
-
-
 # Contributor License Agreement
 
 Thank you for your interest in contributing to our project. By contributing to this project, you agree to the following terms.
