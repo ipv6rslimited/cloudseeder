@@ -198,6 +198,10 @@ Please donate to the respective projects! These are awesome platforms built by g
 
 And when you're looking for an external IP, definitely give [IPv6rs](https://ipv6.rs) (us) a look.
 
+### Contributing
+
+We are always looking for help! All contributions are subject to the Contributor Licensing Agreement found in our CONTRIBUTIONS.md document.
+
 ### License
 
 Copyright (c) 2024 [IPv6rs Limited <https://ipv6.rs>](https://ipv6.rs)
