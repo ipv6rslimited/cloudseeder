@@ -49,23 +49,29 @@ type UIItem struct {
 
 
 func main() {
-  appliances, err := getApplianceVersions()
-  if err != nil {
-    fmt.Printf("Error reading appliance versions: %v\n", err)
-    return
-  }
-  uiState, err := getUIStateConfig()
-  if err != nil {
-    fmt.Printf("Error reading UI update config: %v\n", err)
-    return
-  }
-  edited := checkAndUpdateContainers(appliances, &uiState)
-  if edited {
-    if err := saveUIStateConfig(uiState); err != nil {
-      fmt.Printf("Error writing UI update config: %v\n", err)
-    }
+  exists := checkBinaryExists("podman")
+  
+  if !exists {
+    fmt.Printf("You need to install podman to use this tool.")
   } else {
-    fmt.Println("No changes.")
+    appliances, err := getApplianceVersions()
+    if err != nil {
+      fmt.Printf("Error reading appliance versions: %v\n", err)
+      return
+    }
+    uiState, err := getUIStateConfig()
+    if err != nil {
+      fmt.Printf("Error reading UI update config: %v\n", err)
+      return
+    }
+    edited := checkAndUpdateContainers(appliances, &uiState)
+    if edited {
+      if err := saveUIStateConfig(uiState); err != nil {
+        fmt.Printf("Error writing UI update config: %v\n", err)
+      }
+    } else {
+      fmt.Println("No changes.")
+    }
   }
 }
 
@@ -234,18 +240,13 @@ func insertUpgradeOption(index int, uiState *UIState, item UIItem, appliance str
     scriptPath = filepath.Join(homeDir, ".ipv6rs", "upgrade.sh")
   }
 
-  var upgradeCommand string
-  if runtime.GOOS == "windows" {
-    upgradeCommand = fmt.Sprintf("'%s', '%s', '%s', '%d'", scriptPath, item.Title, appliance, newVersion)
-  } else {
-    upgradeCommand = fmt.Sprintf("'%s' '%s' '%s' '%d'", scriptPath, item.Title, appliance, newVersion)
-  }
+  upgradeCommand := fmt.Sprintf("'%s' '%s' '%s' '%d'", scriptPath, item.Title, appliance, newVersion)
   terminalCommand := getShellCommand(upgradeCommand)
-
   upgradeItem := UIItem{
     Title: "Upgrade",
     Exec:  terminalCommand,
     Icon:  "UploadIcon",
+    Hide:  true,
   }
 
   if index >= 0 && index < len(uiState.Items) {
@@ -259,16 +260,47 @@ func insertUpgradeOption(index int, uiState *UIState, item UIItem, appliance str
 func getShellCommand(command string) string {
   switch runtime.GOOS {
     case "windows":
-      return fmt.Sprintf("Start-Process powershell -ArgumentList '-NoExit', '-File', %s", command)
+      return fmt.Sprintf(`& '%s/viewer.exe' %s`, getConfigPath(), command)    
     case "darwin":
-      return fmt.Sprintf("osascript -e 'tell application \"Terminal\" to do script \"%s\"'", command)
+      return fmt.Sprintf(`'%s/viewer' "%s"`, getConfigPath(), command)
     case "linux":
-      return fmt.Sprintf("gnome-terminal -- bash -c '%s; exec bash'", command)
+      return fmt.Sprintf(`'%s/viewer' "%s; exec bash"`, getConfigPath(), command)
     default:
       fmt.Println("Unsupported platform")
       return ""
   }
 }
+
+func checkBinaryExists(binaryName string) bool {
+  if runtime.GOOS == "windows" && filepath.Ext(binaryName) != ".exe" {
+    binaryName += ".exe"
+  }
+  
+  _, err := exec.LookPath(binaryName)
+  if err != nil {
+    commonPaths := []string{
+      "/usr/local/bin/",
+      "/usr/bin/",
+      "/bin/",   
+      "/usr/local/bin/",
+      "/opt/homebrew/bin/",
+      "/opt/podman/bin/",
+      "C:\\Program Files (x86)\\Podman\\",
+      "C:\\Program Files\\RedHat\\Podman\\",
+    }
+    for _, path := range commonPaths {
+      fullPath := filepath.Join(path, binaryName)
+      if _, err := os.Stat(fullPath); err == nil {
+        addPath(path)
+        fmt.Printf("Found '%s' at '%s'\n", binaryName, fullPath)
+        return true
+      }
+    }
+    
+    return false
+  } 
+  return true
+} 
 
 func getPodmanExecutable() string {
   switch runtime.GOOS {
@@ -277,10 +309,20 @@ func getPodmanExecutable() string {
     case "linux":
       return "podman"
     case "darwin":
-      return "/opt/podman/bin/podman"
+      return "podman"
     default:
       fmt.Println("Unsupported")
       return ""
   }
 }   
+
+func addPath(dirs ...string) error {
+  originalPath := os.Getenv("PATH")
+  additionalPath := strings.Join(dirs, string(os.PathListSeparator))
+  newPath := originalPath + string(os.PathListSeparator) + additionalPath
+  if err := os.Setenv("PATH", newPath); err != nil {
+    return err
+  }  
+  return nil
+}
 

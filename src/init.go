@@ -174,6 +174,7 @@ func setupInitialFiles() {
     log.Println("No sideload.json found or error reading: ", err)
   }
 
+  viewer := "viewer"
   backup := "backup"
   checker := "checker"
   upgrade := "upgrade"
@@ -181,17 +182,23 @@ func setupInitialFiles() {
     backup += ".exe"
     checker += ".exe"
     upgrade += ".ps1"
+    viewer += ".exe"
   } else {
     upgrade += ".sh"
   }
 
+  srcViewerFile := filepath.Join(resourcesPath, viewer)
   srcBackupFile := filepath.Join(resourcesPath, backup)
   srcCheckerFile := filepath.Join(resourcesPath, checker)
   srcUpgradeFile := filepath.Join(resourcesPath, upgrade)
+  destViewerFile := filepath.Join(configPath, viewer)
   destBackupFile := filepath.Join(configPath, backup)
   destCheckerFile := filepath.Join(configPath, checker)
   destUpgradeFile := filepath.Join(configPath, upgrade)
 
+  if err := copyFile(srcViewerFile, destViewerFile); err != nil {
+    log.Fatalf("Failed to copy viewer file: %v", err)
+  }
   if err := copyFile(srcBackupFile, destBackupFile); err != nil {
     log.Fatalf("Failed to copy backup file: %v", err)
   }
@@ -203,6 +210,10 @@ func setupInitialFiles() {
   }
 
   if runtime.GOOS != "windows" {
+    err = os.Chmod(destViewerFile, 0755)
+    if err != nil {
+      log.Fatalf("Failed to chmod the viewer file: %v", err)
+    }
     err = os.Chmod(destBackupFile, 0755)
     if err != nil {
       log.Fatalf("Failed to chmod the backup file: %v", err)

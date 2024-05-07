@@ -61,6 +61,11 @@ darwin:
 	@cp tray/dist/cloudseeder-monitor-macos-amd64 "fyne-cross/dist/darwin-amd64/${NAME}.app/Contents/MacOS/cloudseeder-monitor"
 	@lipo -create -output "fyne-cross/dist/darwin-universal/${NAME}.app/Contents/MacOS/cloudseeder-monitor" "tray/dist/cloudseeder-monitor-macos-arm64" "tray/dist/cloudseeder-monitor-macos-amd64"
 
+	@cd viewer && make darwin && cd ..
+	@cp viewer/dist/cloudseeder-viewer-macos-arm64 "fyne-cross/dist/darwin-arm64/${NAME}.app/Contents/Resources/viewer"
+	@cp viewer/dist/cloudseeder-viewer-macos-amd64 "fyne-cross/dist/darwin-amd64/${NAME}.app/Contents/Resources/viewer"
+	@lipo -create -output "fyne-cross/dist/darwin-universal/${NAME}.app/Contents/Resources/viewer" "viewer/dist/cloudseeder-viewer-macos-arm64" "viewer/dist/cloudseeder-viewer-macos-amd64"
+
 	@mkdir -p dist/
 	@mv "fyne-cross/dist/darwin-arm64/${NAME}.app" "dist/${NAME}-mac-arm64.app"
 	@mv "fyne-cross/dist/darwin-amd64/${NAME}.app" "dist/${NAME}-mac-amd64.app"
@@ -97,6 +102,9 @@ linux-x86:
 
 	@cd tray && make linux-x86 && cd ..
 	@cp tray/dist/cloudseeder-monitor-linux-amd64 "fyne-cross/dist/linux-amd64/bin/cloudseeder-monitor"
+
+	@cd viewer && make linux-x86 && cd ..
+	@cp viewer/dist/cloudseeder-viewer-linux-amd64 "fyne-cross/dist/linux-amd64/Resources/viewer"
 
 	@rm fyne-cross/dist/linux-amd64/Makefile
 
@@ -145,6 +153,9 @@ linux-arm:
 	@cd tray && make linux-arm && cd ..
 	@cp tray/dist/cloudseeder-monitor-linux-arm64 "fyne-cross/dist/linux-arm64/bin/cloudseeder-monitor"
 
+	@cd viewer && make linux-arm && cd ..
+	@cp viewer/dist/cloudseeder-viewer-linux-arm64 "fyne-cross/dist/linux-arm64/Resources/viewer"
+
 	@rm fyne-cross/dist/linux-arm64/Makefile
 
 	@rm fyne-cross/dist/linux-arm64/${CURRENT_FOLDER}.tar.xz
@@ -191,6 +202,9 @@ windows-x86:
 	@cd tray && make windows-x86 && cd ..
 	@cp tray/dist/cloudseeder-monitor-windows-amd64.exe "fyne-cross/dist/windows-amd64/bin/cloudseeder-monitor.exe"
 
+	@cd viewer && make windows-x86 && cd ..
+	@cp viewer/dist/cloudseeder-viewer-windows-amd64.exe "fyne-cross/dist/windows-amd64/Resources/viewer.exe"
+
 	@rm fyne-cross/dist/windows-amd64/${CURRENT_FOLDER}.exe.zip
 
 	@(cd fyne-cross/dist/ && mv windows-amd64 "${NAME}-windows-amd64" && zip -r "${NAME}-windows-amd64.zip" "./${NAME}-windows-amd64" > /dev/null 2>&1)
@@ -229,6 +243,9 @@ windows-arm:
 	@cd tray && make windows-arm && cd ..
 	@cp tray/dist/cloudseeder-monitor-windows-arm64.exe "fyne-cross/dist/windows-arm64/bin/cloudseeder-monitor.exe"
 
+	@cd viewer && make windows-arm && cd ..
+	@cp viewer/dist/cloudseeder-viewer-windows-arm64.exe "fyne-cross/dist/windows-arm64/Resources/viewer.exe"
+
 	@rm fyne-cross/dist/windows-arm64/${CURRENT_FOLDER}.exe.zip
 
 	@(cd fyne-cross/dist/ && mv windows-arm64 "${NAME}-windows-arm64" && zip -r "${NAME}-windows-arm64.zip" "./${NAME}-windows-arm64" > /dev/null 2>&1)
@@ -245,6 +262,7 @@ clean:
 	cd backup && make clean && cd ..
 	cd checker && make clean && cd ..
 	cd tray && make clean && cd ..
+	cd viewer && make clean && cd ..
 
 help:
 	@echo "Available commands:"

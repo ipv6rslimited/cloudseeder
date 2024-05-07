@@ -63,9 +63,17 @@ type UIState struct {
   Items  []UIItem          `json:"items"`
 }
 
+type terminalInfo struct {
+  Name     string
+  ExecFlag string
+  Quote    string
+}
+
 var (
-  containers   map[string]Container
-  containersMu sync.Mutex
+  containers       map[string]Container
+  containersMu     sync.Mutex
+  detectedTerminal *terminalInfo
+  once             sync.Once
 )
 
 
@@ -415,7 +423,12 @@ func getShellCommand(containerName string) string {
     case "darwin":
       return fmt.Sprintf("osascript -e 'tell application \"Terminal\" to do script \"podman exec -it %s /bin/bash\"'", containerName)
     case "linux":
-      return fmt.Sprintf("gnome-terminal -- bash -c 'podman exec -it %s /bin/bash; exec bash'", containerName)
+      term, err := findTerminal()
+      if err != nil {
+        fmt.Println("Error:", err)
+        return ""
+      }
+      return fmt.Sprintf(`%s %s %sbash -c 'podman exec -it %s /bin/bash; exec bash'%s`, term.Name, term.ExecFlag, term.Quote, containerName, term.Quote)
     default:
       fmt.Println("Unsupported platform")
       return ""
@@ -450,4 +463,32 @@ func createLockFile(configPath string) (lockfile.Lockfile, error) {
     return lock, fmt.Errorf("failed to acquire lock: %v", err)
   }
   return lock, nil
+}
+
+func findTerminal() (*terminalInfo, error) {
+  var err error
+  once.Do(func() {
+    terminals := map[string][2]string{
+      "gnome-terminal": {"--", ""},
+      "konsole":        {"-e", ""},
+      "lxterminal":     {"--command", "\""},
+      "urxvt":          {"-e", ""},
+      "xterm":          {"-e", ""},
+      "xfce4-terminal": {"-e", "\""},
+    }
+
+    for name, config := range terminals {
+      path, lookErr := exec.LookPath(name)
+      if lookErr == nil {
+        detectedTerminal = &terminalInfo{
+          Name:     path,
+          ExecFlag: config[0],
+          Quote:    config[1],
+        }
+        return
+      }
+    }
+    err = fmt.Errorf("no terminal found")
+  })
+  return detectedTerminal, err
 }

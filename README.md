@@ -111,7 +111,7 @@ Cloud Seeders by IPv6rs will instantly setup a server appliance for you on:
 
 - MacOS (x86 or ARM)
 - Windows 10, 11 (x86 only)
-- Linux (gnome-terminal required) (x86 or ARM)
+- Linux (GUI) (x86 or ARM)
 
 Podman must be installed first.
 

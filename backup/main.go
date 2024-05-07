@@ -28,6 +28,11 @@ import (
 
 
 func main() {
+  exists := checkBinaryExists("podman")
+
+  if !exists {
+    log.Fatalf("You need to install podman to use this tool.")
+  }
   if len(os.Args) < 3 {
     log.Fatalf("Usage: %s [backup|restore] containerName [timestamp]", os.Args[0])
   }
@@ -318,6 +323,37 @@ func restoreContainer(containerName, imageFilePath, configFilePath string) error
   return recreateContainerFromConfig(containerName, imageFilePath, configFilePath)
 }
 
+func checkBinaryExists(binaryName string) bool {
+  if runtime.GOOS == "windows" && filepath.Ext(binaryName) != ".exe" {
+    binaryName += ".exe"
+  }
+  
+  _, err := exec.LookPath(binaryName)
+  if err != nil {
+    commonPaths := []string{
+      "/usr/local/bin/",
+      "/usr/bin/",
+      "/bin/",   
+      "/usr/local/bin/",
+      "/opt/homebrew/bin/",
+      "/opt/podman/bin/",
+      "C:\\Program Files (x86)\\Podman\\",
+      "C:\\Program Files\\RedHat\\Podman\\",
+    }
+    for _, path := range commonPaths {
+      fullPath := filepath.Join(path, binaryName)
+      if _, err := os.Stat(fullPath); err == nil {
+        addPath(path)
+        fmt.Printf("Found '%s' at '%s'\n", binaryName, fullPath)
+        return true
+      }
+    }
+    
+    return false
+  } 
+  return true
+} 
+
 func getPodmanExecutable() string {
   switch runtime.GOOS {
     case "windows":
@@ -325,11 +361,21 @@ func getPodmanExecutable() string {
     case "linux":
       return "podman"
     case "darwin":
-      return "/opt/podman/bin/podman"
+      return "podman"
     default:
       fmt.Println("Unsupported")
       return ""
   }
+}   
+
+func addPath(dirs ...string) error {
+  originalPath := os.Getenv("PATH")
+  additionalPath := strings.Join(dirs, string(os.PathListSeparator))
+  newPath := originalPath + string(os.PathListSeparator) + additionalPath
+  if err := os.Setenv("PATH", newPath); err != nil {
+    return err
+  }  
+  return nil
 }
-  
+
 

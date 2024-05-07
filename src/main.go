@@ -14,6 +14,7 @@ package main
 
 import (
   "github.com/ipv6rslimited/configurator"
+  "strings"
   "encoding/json"
   "fyne.io/fyne/v2"
   "fyne.io/fyne/v2/app"
@@ -26,7 +27,6 @@ import (
   "path/filepath"
   "io/ioutil"
   "log"
-  "time"
   "os"
   "os/exec"
   "runtime"
@@ -122,8 +122,6 @@ func main() {
       )))
       splashWindow.Show()
  
-      time.Sleep(1 * time.Second)
-
       setupInitialFiles()
       statusLabel.SetText("Loading Appliances...")
       applianceInfos, err = loadAppliancesFromJSON(filepath.Join(configPath, "appliances.json"))
@@ -132,7 +130,6 @@ func main() {
         log.Fatal(err)
       }
       updateUI(myApp, myWindow, configPath)
-      time.Sleep(1 * time.Second)
 
       splashWindow.Close()
       myWindow.Show()
@@ -227,6 +224,16 @@ func makeCardInteractive(app fyne.App, window fyne.Window, card *widget.Card, ac
   return cardContainer
 }
 
+func addPath(dirs ...string) error {
+  originalPath := os.Getenv("PATH")
+  additionalPath := strings.Join(dirs, string(os.PathListSeparator))
+  newPath := originalPath + string(os.PathListSeparator) + additionalPath
+  if err := os.Setenv("PATH", newPath); err != nil {
+    return err
+  }
+  return nil
+}
+
 func createConfirmationWindow(app fyne.App, requirements string, target string) {
   win := app.NewWindow("Confirmation")
   win.Resize(fyne.NewSize(600, 300))
@@ -294,12 +301,16 @@ func checkBinaryExists(binaryName string) bool {
       "/usr/local/bin/",
       "/usr/bin/",
       "/bin/",
-      "/opt/",
+      "/usr/local/bin/",
+      "/opt/homebrew/bin/",
+      "/opt/podman/bin/",
       "C:\\Program Files (x86)\\Podman\\",
+      "C:\\Program Files\\RedHat\\Podman\\",
     }
     for _, path := range commonPaths {
       fullPath := filepath.Join(path, binaryName)
       if _, err := os.Stat(fullPath); err == nil {
+        addPath(path)
         fmt.Printf("Found '%s' at '%s'\n", binaryName, fullPath)
         return true
       }
