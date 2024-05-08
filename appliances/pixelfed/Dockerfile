@@ -29,7 +29,7 @@ RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
 
 RUN git clone https://github.com/tjko/jpegoptim.git && \
     (cd jpegoptim && ./configure && make && make strip && make install && cd .. && rm -rf jpegoptim) && \
-    (cd /var/www/ && rm -rf html && git clone -b v0.12.0 https://github.com/pixelfed/pixelfed.git html && cd html && \
+    (cd /var/www/ && rm -rf html && git clone -b v0.12.1 https://github.com/pixelfed/pixelfed.git html && cd html && \
      chown -R www-data:www-data . && \
      find . -type d -exec chmod 755 {} + && \
      find . -type f -exec chmod 644 {} +) && \
