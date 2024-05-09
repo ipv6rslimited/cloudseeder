@@ -48,6 +48,14 @@
     "action": "~/.ipv6rs/appliances/ghost/config.json"
   },
   {
+    "title": "Paperless-NGX",
+    "short": "paperless",
+    "version": 1,
+    "description": "Paperless-NGX is a document management system that makes it easy to scan, search and organize your documents, digitally.\n\nSave the trees!",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/paperless/config.json"
+  },
+  {
     "title": "Misskey",
     "short": "misskey",
     "version": 1,
