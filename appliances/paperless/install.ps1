@@ -36,6 +36,7 @@ Set-Location $directoryPath
 Write-Output "To enter your VM type: podman exec -it __NAME /bin/bash"
 Write-Output "You can enable an ssh server by typing: systemctl enable --now ssh" 
 Write-Output ""
+Write-Output "Go to /root and run ./make_admin.sh to create the admin account"
 Write-Output "Finish setup at: https://__SERVERNAME/"
 Read-Host "Press Enter to continue"
 

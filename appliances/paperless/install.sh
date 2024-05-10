@@ -48,6 +48,7 @@ echo
 echo To enter your VM type: podman exec -it __NAME /bin/bash
 echo You can enable an ssh server by typing: systemctl enable --now ssh
 echo
+echo Go to /root and run ./make_admin.sh to create the admin account
 echo Finish setup at: https://__SERVERNAME/
 echo
 echo
