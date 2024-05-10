@@ -26,7 +26,7 @@
   {
     "title": "code-server",
     "short": "codeserver",
-    "version": 1,
+    "version": 2,
     "description": "code-server by coder.com is VS Code in your browser.\n\nCode from anywhere, on any device - even tablets.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/codeserver/config.json"
