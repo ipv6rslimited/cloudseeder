@@ -152,6 +152,14 @@
     "action": "~/.ipv6rs/appliances/planka/config.json"
   },
   {
+    "title": "TheLounge",
+    "short": "thelounge",
+    "version": 1,
+    "description": "TheLounge is a web based IRC client. IRC is a decentralized, federated chat protocol.\n\nChat with friends, old and new!",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/thelounge/config.json"
+  },
+  {
     "title": "XMPP",
     "short": "xmpp",
     "version": 1,
