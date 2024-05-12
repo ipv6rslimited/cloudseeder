@@ -49,7 +49,7 @@ echo To enter your VM type: podman exec -it __NAME /bin/bash
 echo You can enable an ssh server by typing: systemctl enable --now ssh
 echo
 echo Finish setup at: https://__SERVERNAME/
-echo You can visit all your *Arr apps at /<app> like /radarr
+echo 'You can visit all your *Arr apps at /<app> like /radarr'
 echo QBittorrent is available at /qbittorrent locked to IPv6rs
 echo Your password for QBittorrent and the server is your root password.
 echo
