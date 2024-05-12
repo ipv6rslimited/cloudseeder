@@ -122,7 +122,7 @@
   {
     "title": "Jellyfin",
     "short": "jellyfin",
-    "version": 1,
+    "version": 2,
     "description": "Jellyfin helps you access your home media library from anywhere.\n\nWatch what you want, when you want, where you want.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/jellyfin/config.json"
