@@ -62,6 +62,8 @@ There will be many more appliances supported in the future. The current list is 
 
 - [Ghost](https://github.com/TryGhost/Ghost)
 
+- [Paperless-NGX](https://docs.paperless-ngx.com/)
+
 - [Misskey](https://misskey-hub.net/)
 
 - [Lemmy](https://join-lemmy.org/)
@@ -86,6 +88,8 @@ There will be many more appliances supported in the future. The current list is 
 
 - [Planka](https://planka.app/)
 
+- [TheLounge](https://thelounge.chat)
+
 - [XMPP](https://xmpp.org/)
 
 - [YaCy](https://yacy.net)
@@ -103,6 +107,8 @@ There will be many more appliances supported in the future. The current list is 
 - [LAMP Server](https://issues.apache.org/)
 
 - Base [Ubuntu 22.04](https://ubuntu.com/)
+
+- [*Arr](https://wiki.servarr.com) and [QBittorrent](https://qbittorrent.org)
 
 
 #### Current Supported Architectures
