@@ -230,5 +230,13 @@
     "description": "Vanilla server appliance running Ubuntu 22.04 LTS.\n\nIt's the most popular Linux Desktop OS!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration",
     "action": "~/.ipv6rs/appliances/base/config.json"
+  },
+  {
+    "title": "*Arr + QBittorrent",
+    "short": "arr",
+    "version": 1,
+    "description": "*Arr is a Media Organizer. QBittorrent is a Torrent Downloader.\n\nTogether, you have hands free media management.",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs Gateway's IP.\n\nDo NOT use this software for anything you are not authorized to do. You are responsible for proper use of this software and any results thereof.",
+    "action": "~/.ipv6rs/appliances/arr/config.json"
   }
 ]
