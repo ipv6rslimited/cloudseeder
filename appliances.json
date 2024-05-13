@@ -82,7 +82,7 @@
   {
     "title": "RocketChat",
     "short": "rocketchat",
-    "version": 1,
+    "version": 2,
     "description": "RocketChat is a team chat that is self-hosted and truly private.\n\nWhy would you want a rich organization who could execute your ideas looking at your ideas?",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/rocketchat/config.json"
