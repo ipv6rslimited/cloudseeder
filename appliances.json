@@ -210,7 +210,7 @@
   {
     "title": "Navidrome",
     "short": "navidrome",
-    "version": 1,
+    "version": 2,
     "description": "Navidrome gives you access to your home music library anywhere and from any device.\n\nListen under your direction.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/navidrome/config.json"

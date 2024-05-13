@@ -21,7 +21,7 @@ RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
     sudo install -d -o navidrome -g navidrome /opt/navidrome && \
     sudo install -d -o navidrome -g navidrome /var/lib/navidrome && \
     arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
-    wget https://github.com/navidrome/navidrome/releases/download/v0.51.1/navidrome_0.51.1_linux_${arch}.tar.gz -O Navidrome.tar.gz && \
+    wget https://github.com/navidrome/navidrome/releases/download/v0.52.5/navidrome_0.52.5_linux_${arch}.tar.gz -O Navidrome.tar.gz && \
     sudo tar -xvzf Navidrome.tar.gz -C /opt/navidrome/ && \
     sudo chown -R navidrome:navidrome /opt/navidrome && \ 
     rm Navidrome.tar.gz && \
