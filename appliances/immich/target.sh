@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=3
+TARGET_VERSION=4
 
 # This package is powered by github.com/arter97/immich-native
 
@@ -141,7 +141,7 @@ install_script=$(cat <<'SCRIPTEOF'
 
 set -xeuo pipefail
 
-TAG=v1.105.0
+TAG=v1.105.1
 
 IMMICH_PATH=/var/lib/immich
 APP=$IMMICH_PATH/app
