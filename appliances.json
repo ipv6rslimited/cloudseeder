@@ -138,7 +138,7 @@
   {
     "title": "Immich",
     "short": "immich",
-    "version": 2,
+    "version": 3,
     "description": "Immich is a self hosted Images/Photos platform by Alex Tran. This is the Native install by arter97\n\nIt's powerful.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/immich/config.json"
