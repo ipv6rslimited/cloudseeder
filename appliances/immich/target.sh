@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=1
+TARGET_VERSION=2
 
 # This package is powered by github.com/arter97/immich-native
 
@@ -141,7 +141,7 @@ install_script=$(cat <<'SCRIPTEOF'
 
 set -xeuo pipefail
 
-TAG=v1.101.0
+TAG=v1.104.0
 
 IMMICH_PATH=/var/lib/immich
 APP=$IMMICH_PATH/app
@@ -196,7 +196,21 @@ python3 -m venv $APP/machine-learning/venv
   pip3 install poetry
   cd machine-learning
   # pip install poetry
-  poetry install --no-root --with dev --with cpu
+  max_attempts=5
+  attempt=1
+  while [ $attempt -le $max_attempts ]; do
+    echo "Attempt $attempt of $max_attempts: Installing dependencies..."
+    set +e
+    poetry install --no-root --with dev --with cpu && break || echo "Attempt failed, retrying in 10 seconds..."
+    set -e
+    sleep 10
+    attempt=$((attempt + 1))
+  done
+
+  if [ $attempt -gt $max_attempts ]; then
+    echo "Failed to install dependencies after $max_attempts attempts."
+    exit 1
+  fi
   cd ..
 )
 cp -a machine-learning/ann machine-learning/start.sh machine-learning/app $APP/machine-learning/
