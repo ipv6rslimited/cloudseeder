@@ -176,6 +176,11 @@ func checkAndUpdateContainers(appliances []Appliance, uiState *UIState) bool {
               insertUpgradeOption(i, uiState, item, name, appliance.Version)
               edited = true
               upgradeFound = true
+            } else {
+              removeUpgradeOption(i, uiState)
+              insertUpgradeOption(i, uiState, item, name, appliance.Version)
+              edited = true
+              upgradeFound = true
             }
           } else {
             fmt.Printf("%s is at the current version %d\n", item.Title, versionNumber)
