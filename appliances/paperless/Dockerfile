@@ -26,8 +26,8 @@ RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
     apt-get install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" nodejs postgresql postgresql-contrib redis
 
 RUN adduser --disabled-password --gecos "" --home /opt/paperless paperless && \
-    curl -O -L https://github.com/paperless-ngx/paperless-ngx/releases/download/v2.8.2/paperless-ngx-v2.8.2.tar.xz && \
-    tar -xf paperless-ngx-v2.8.2.tar.xz -C /opt/paperless && \
+    curl -O -L https://github.com/paperless-ngx/paperless-ngx/releases/download/v2.8.4/paperless-ngx-v2.8.4.tar.xz && \
+    tar -xf paperless-ngx-v2.8.4.tar.xz -C /opt/paperless && \
     mv /opt/paperless/paperless-ngx/* /opt/paperless/ && \
     rm -rf /opt/paperless/paperless-ngx && \
     mkdir -p /opt/paperless/media && mkdir -p /opt/paperless/data && mkdir -p /opt/paperless/consume && mkdir -p /opt/paperless/static && mkdir -p /opt/paperless/trash && \
