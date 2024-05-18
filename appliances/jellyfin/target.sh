@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=3
+TARGET_VERSION=4
 
 CONFIG=$(cat <<EOF
 <VirtualHost *:80>
