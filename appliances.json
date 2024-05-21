@@ -146,7 +146,7 @@
   {
     "title": "Planka",
     "short": "planka",
-    "version": 3,
+    "version": 4,
     "description": "A Kanban style To Do board that's completely open source.\n\nDon't trust your data with a third party todo provider.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/planka/config.json"
