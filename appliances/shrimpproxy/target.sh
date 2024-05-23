@@ -126,6 +126,6 @@ chmod u+x /root/lockdown.sh
 echo "$TARGET_VERSION" > "${TARGET_MARKER}"
 chattr +i "${TARGET_MARKER}"
 
-echo "squidproxy" > "${TARGET_MARKER}.name"
+echo "shrimpproxy" > "${TARGET_MARKER}.name"
 
 exec "$@"
