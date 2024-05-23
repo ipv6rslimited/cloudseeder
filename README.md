@@ -64,6 +64,8 @@ There will be many more appliances supported in the future. The current list is 
 
 - [Paperless-NGX](https://docs.paperless-ngx.com/)
 
+- [shrimp](https://github.com/ipv6rslimited/shrimp)
+
 - [Misskey](https://misskey-hub.net/)
 
 - [Lemmy](https://join-lemmy.org/)
