@@ -277,12 +277,23 @@ func recreateContainerFromConfig(containerName string, imageFilePath string, con
     privFlag = "--privileged"
   }
 
+  portMappings := hostConfig["PortBindings"].(map[string]interface{})
+  var ports []string
+  for port, bindings := range portMappings {
+    for _, binding := range bindings.([]interface{}) {
+      hostBinding := binding.(map[string]interface{})
+      hostIP := hostBinding["HostIp"].(string)
+      ports = append(ports, fmt.Sprintf("-p %s:%s:%s", hostIP, hostBinding["HostPort"].(string), port))
+    }
+  }
+
   args := []string{"run", "-d", "--name", quoteArgument(containerName), privFlag}
   args = append(args, envs...)
   args = append(args, volumes...)
   args = append(args, capabilities...)
   args = append(args, deviceMappings...)
   args = append(args, securityOpts...)
+  args = append(args, ports...)
   args = append(args, quoteArgument(imageName))
 
   podmanCommand := strings.Join(args, " ")
