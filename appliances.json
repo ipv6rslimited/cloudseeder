@@ -122,7 +122,7 @@
   {
     "title": "Stalwart Mail",
     "short": "stalwart",
-    "version": 1,
+    "version": 2,
     "description": "E-mail server powered by Stalwart, a 21st century mail system.\n\nTry the new way of running an email server.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP\n- MX record",
     "action": "~/.ipv6rs/appliances/stalwart/config.json"
