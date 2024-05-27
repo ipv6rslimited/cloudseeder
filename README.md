@@ -112,6 +112,7 @@ There will be many more appliances supported in the future. The current list is 
 
 - [*Arr](https://wiki.servarr.com) and [QBittorrent](https://qbittorrent.org)
 
+- [Miniflux](https://miniflux.app)
 
 #### Current Supported Architectures
 
