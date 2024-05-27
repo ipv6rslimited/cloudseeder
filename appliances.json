@@ -186,7 +186,7 @@
   {
     "title": "Gitea",
     "short": "gitea",
-    "version": 1,
+    "version": 2,
     "description": "Gitea is a git repository. They have begun ActivityPub integration.\n\nThe future of social git is ActivityPub.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/gitea/config.json"

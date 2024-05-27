@@ -18,7 +18,7 @@ RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
     sed -i "/^bind-address\s*=/c\bind-address            = 127.0.0.1,::1" /etc/mysql/mysql.conf.d/mysqld.cnf && \
     sed -i "/^mysqlx-bind-address\s*=/c\mysqlx-bind-address     = 127.0.0.1,::1" /etc/mysql/mysql.conf.d/mysqld.cnf && \
     arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
-    wget https://github.com/go-gitea/gitea/releases/download/v1.21.11/gitea-1.21.11-linux-${arch} -O /usr/bin/gitea && \
+    wget https://github.com/go-gitea/gitea/releases/download/v1.22.0/gitea-1.22.0-linux-${arch} -O /usr/bin/gitea && \
     chmod 755 /usr/bin/gitea && \
     adduser --system --shell /bin/bash --group --gecos "" --disabled-password --home /home/git git && \
     mkdir -p /etc/gitea /var/lib/gitea/custom /var/lib/gitea/data /var/lib/gitea/indexers /var/lib/gitea/public /var/lib/gitea/log && \
