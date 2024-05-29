@@ -259,7 +259,7 @@
     "title": "Nostr",
     "short": "nostr",
     "version": 1,
-    "description": "Nostr is endorsed by Jack Dorsey. It allows you to send simple notes, but creates a powerful ecosystem.\n\nnostr-rs-relay is a rust implementation of a nostr relay. It is configured so that only you can post!",
+    "description": "Nostr is endorsed by Jack Dorsey. It allows you to send simple notes, but creates a powerful ecosystem.\n\nOur deploy of nostr-rs-relay is configured so only you can post!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/nostr/config.json"
   }
