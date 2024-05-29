@@ -114,6 +114,8 @@ There will be many more appliances supported in the future. The current list is 
 
 - [Miniflux](https://miniflux.app)
 
+- [Nostr](https://sr.ht/~gheartsfield/nostr-rs-relay/)
+
 #### Current Supported Architectures
 
 Cloud Seeders by IPv6rs will instantly setup a server appliance for you on:
