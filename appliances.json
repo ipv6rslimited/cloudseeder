@@ -107,7 +107,7 @@
     "title": "Bluesky",
     "short": "bluesky",
     "version": 1,
-    "description": "Bluesky is a federated social networking system using the AT protocol.\n\nIt's endorsed by Jack Dorsey.",
+    "description": "Bluesky is a federated social networking system using the AT protocol.\n\nThis is for advanced users only.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP\n\n- Runs in privileged mode!",
     "action": "~/.ipv6rs/appliances/bluesky/config.json"
   },
@@ -254,5 +254,13 @@
     "description": "Miniflux is a self-hosted RSS feed reader.\n\nStay up to date with all your favorite feeds!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/miniflux/config.json"
+  },
+  {
+    "title": "Nostr",
+    "short": "nostr",
+    "version": 1,
+    "description": "Nostr is endorsed by Jack Dorsey. It allows you to send simple notes, but creates a powerful ecosystem.\n\nnostr-rs-relay is a rust implementation of a nostr relay. It is configured so that only you can post!",
+    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
+    "action": "~/.ipv6rs/appliances/nostr/config.json"
   }
 ]
