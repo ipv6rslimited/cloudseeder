@@ -42,7 +42,7 @@
   {
     "title": "Ghost",
     "short": "ghost",
-    "version": 6,
+    "version": 7,
     "description": "Ghost is a new age blogging and newsletter subscription platform.\n\nMake money writing.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/ghost/config.json"
@@ -66,7 +66,7 @@
   {
     "title": "Misskey",
     "short": "misskey",
-    "version": 1,
+    "version": 2,
     "description": "Misskey is one of the most popular ActivityPub softwares in the world\n\nParticipate in the fediverse!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/misskey/config.json"

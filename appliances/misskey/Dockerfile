@@ -24,7 +24,7 @@ RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
     apt-get install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" nodejs postgresql postgresql-contrib
 RUN npm install -g corepack && \
     corepack enable && \
-    (cd /opt && git clone --recursive https://github.com/misskey-dev/misskey.git && cd misskey && git checkout 2024.3.1 && git submodule update --init && pnpm install --frozen-lockfile && NODE_ENV=production pnpm run build) && \
+    (cd /opt && git clone --recursive https://github.com/misskey-dev/misskey.git && cd misskey && git checkout 2024.5.0 && git submodule update --init && pnpm install --frozen-lockfile && NODE_ENV=production pnpm run build) && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
