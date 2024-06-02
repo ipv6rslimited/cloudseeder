@@ -10,7 +10,7 @@
   {
     "title": "Ollama OpenWeb-UI",
     "short": "ollamaweb",
-    "version": 4,
+    "version": 5,
     "description": "Ollama and OpenWeb-UI gives you an AI LLM to chat with locally and remotely.\n\nChat confidentially without a middleman.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP\n- Ollama running on the host computer\n- OLLAMA_HOST set to 0.0.0.0\n- See https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server",
     "action": "~/.ipv6rs/appliances/ollamaweb/config.json"
@@ -130,7 +130,7 @@
   {
     "title": "Jellyfin",
     "short": "jellyfin",
-    "version": 5,
+    "version": 6,
     "description": "Jellyfin helps you access your home media library from anywhere.\n\nWatch what you want, when you want, where you want.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/jellyfin/config.json"
@@ -154,7 +154,7 @@
   {
     "title": "Planka",
     "short": "planka",
-    "version": 4,
+    "version": 5,
     "description": "A Kanban style To Do board that's completely open source.\n\nDon't trust your data with a third party todo provider.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/planka/config.json"

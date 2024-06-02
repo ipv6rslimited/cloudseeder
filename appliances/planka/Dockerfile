@@ -27,7 +27,7 @@ RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
     mkdir -p /var/www/planka && \
     mkdir -p /var/log/planka && \
     chown -R planka:planka /var/www/planka && \
-    curl -fsSL https://github.com/plankanban/planka/releases/download/v1.17.4/planka-prebuild-v1.17.4.zip -o /root/planka-prebuild.zip && \
+    curl -fsSL https://github.com/plankanban/planka/releases/download/v1.17.5/planka-prebuild-v1.17.5.zip -o /root/planka-prebuild.zip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
