@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=5
+TARGET_VERSION=6
 
 openwebui_nginx_temp=$(cat <<EOF
 server {
