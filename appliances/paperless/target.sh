@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=4
+TARGET_VERSION=5
 
 paperless_consumption_link=$(cat <<'EOF'
 #!/bin/bash
