@@ -10,7 +10,7 @@
   {
     "title": "Ollama OpenWeb-UI",
     "short": "ollamaweb",
-    "version": 9,
+    "version": 10,
     "description": "Ollama and OpenWeb-UI gives you an AI LLM to chat with locally and remotely.\n\nChat confidentially without a middleman.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP\n- Ollama running on the host computer\n- OLLAMA_HOST set to 0.0.0.0\n- See https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server",
     "action": "~/.ipv6rs/appliances/ollamaweb/config.json"
