@@ -42,7 +42,7 @@
   {
     "title": "Ghost",
     "short": "ghost",
-    "version": 8,
+    "version": 9,
     "description": "Ghost is a new age blogging and newsletter subscription platform.\n\nMake money writing.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/ghost/config.json"
