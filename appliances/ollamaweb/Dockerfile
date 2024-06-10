@@ -15,7 +15,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 
 RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
     echo "11" | apt install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" sudo nginx ca-certificates curl certbot python3 python3-pip build-essential python3-certbot-nginx git && \
-    git clone --branch v0.2.5 --depth 1 https://github.com/open-webui/open-webui /app && \
+    git clone --branch v0.3.1 --depth 1 https://github.com/open-webui/open-webui /app && \
     mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
