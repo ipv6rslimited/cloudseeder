@@ -17,8 +17,8 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
     echo "11" | apt install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" sudo nginx git ca-certificates curl gnupg certbot python3 build-essential python3-certbot-nginx && \
     arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) && \
-    curl -fOL https://github.com/coder/code-server/releases/download/v4.90.1/code-server_4.90.1_${arch}.deb && \
-    sudo dpkg -i code-server_4.90.1_${arch}.deb && \
+    curl -fOL https://github.com/coder/code-server/releases/download/v4.90.2/code-server_4.90.2_${arch}.deb && \
+    sudo dpkg -i code-server_4.90.2_${arch}.deb && \
     adduser --disabled-password --gecos "" codeserver && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
