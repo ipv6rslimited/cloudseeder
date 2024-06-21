@@ -26,7 +26,7 @@
   {
     "title": "code-server",
     "short": "codeserver",
-    "version": 6,
+    "version": 7,
     "description": "code-server by coder.com is VS Code in your browser.\n\nCode from anywhere, on any device - even tablets.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/codeserver/config.json"
@@ -42,7 +42,7 @@
   {
     "title": "Ghost",
     "short": "ghost",
-    "version": 11,
+    "version": 12,
     "description": "Ghost is a new age blogging and newsletter subscription platform.\n\nMake money writing.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/ghost/config.json"
@@ -50,7 +50,7 @@
   {
     "title": "Paperless-NGX",
     "short": "paperless",
-    "version": 5,
+    "version": 6,
     "description": "Paperless-NGX is a document management system that makes it easy to scan, search and organize your documents, digitally.\n\nSave the trees!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/paperless/config.json"
@@ -90,7 +90,7 @@
   {
     "title": "RocketChat",
     "short": "rocketchat",
-    "version": 4,
+    "version": 5,
     "description": "RocketChat is a team chat that is self-hosted and truly private.\n\nWhy would you want a rich organization who could execute your ideas looking at your ideas?",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/rocketchat/config.json"
@@ -154,7 +154,7 @@
   {
     "title": "Planka",
     "short": "planka",
-    "version": 8,
+    "version": 9,
     "description": "A Kanban style To Do board that's completely open source.\n\nDon't trust your data with a third party todo provider.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/planka/config.json"

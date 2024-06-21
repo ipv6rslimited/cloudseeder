@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=11
+TARGET_VERSION=12
 
 DBPASSWORD=$(< /dev/urandom tr -dc 'A-Za-z0-9' | head -c20)
 echo "casper" > /root/.ghost_username
@@ -14,7 +14,7 @@ mkdir -p /var/www/$SERVERNAME
 chown "casper:casper" /var/www/$SERVERNAME
 chmod 775 /var/www/$SERVERNAME
 curl --max-time 2 http://$SERVERNAME
-su - casper -c "PATH=/usr/bin:$PATH cd /var/www/$SERVERNAME && ghost install --db=mysql --dbhost=localhost --dbname=ghost --dbuser=root --dbpass=$DBPASSWORD --url=https://$SERVERNAME --process=systemd --no-prompt --sslemail=$EMAIL 5.85.1"
+su - casper -c "PATH=/usr/bin:$PATH cd /var/www/$SERVERNAME && ghost install --db=mysql --dbhost=localhost --dbname=ghost --dbuser=root --dbpass=$DBPASSWORD --url=https://$SERVERNAME --process=systemd --no-prompt --sslemail=$EMAIL 5.86.1"
 
 echo "$TARGET_VERSION" > "${TARGET_MARKER}"
 chattr +i "${TARGET_MARKER}"
