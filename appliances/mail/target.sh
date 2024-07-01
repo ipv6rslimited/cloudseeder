@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=1
+TARGET_VERSION=2
 
 postfix_main_cf=$(cat <<EOF
 # See /usr/share/postfix/main.cf.dist for a commented, more complete version

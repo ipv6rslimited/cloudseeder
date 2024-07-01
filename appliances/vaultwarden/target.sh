@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=1
+TARGET_VERSION=2
 
 vaultwarden_nginx_temp=$(cat <<EOF
 server {

@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=1
+TARGET_VERSION=2
 
 cat <<EOF | sudo tee /etc/apache2/sites-available/wordpress.conf
 <VirtualHost *:80>

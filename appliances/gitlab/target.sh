@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=1
+TARGET_VERSION=2
 
 sed -i "/^# nginx\['listen_addresses'\] = \['\*', '\[::\]'\]/s/^# //" /etc/gitlab/gitlab.rb
 sed -i "s|external_url .*|external_url 'https://$SERVERNAME'|g" /etc/gitlab/gitlab.rb

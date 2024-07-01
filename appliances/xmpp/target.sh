@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=1
+TARGET_VERSION=2
 
 prosody_cfg_lua=$(cat <<EOF
 admins = { "$ADMIN" }

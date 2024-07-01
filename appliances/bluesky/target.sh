@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=1
+TARGET_VERSION=2
 
 curl https://raw.githubusercontent.com/bluesky-social/pds/v0.4.12/installer.sh >installer.sh
 

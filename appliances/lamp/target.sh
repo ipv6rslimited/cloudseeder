@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=1
+TARGET_VERSION=2
 
 sed -i "s/index.html/index.php index.html/g" "/etc/apache2/mods-enabled/dir.conf"
 service apache2 reload
