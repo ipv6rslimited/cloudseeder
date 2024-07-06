@@ -42,7 +42,7 @@
   {
     "title": "Ghost",
     "short": "ghost",
-    "version": 14,
+    "version": 15,
     "description": "Ghost is a new age blogging and newsletter subscription platform.\n\nMake money writing.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/ghost/config.json"
@@ -122,7 +122,7 @@
   {
     "title": "Stalwart Mail",
     "short": "stalwart",
-    "version": 4,
+    "version": 5,
     "description": "E-mail server powered by Stalwart, a 21st century mail system.\n\nTry the new way of running an email server.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP\n- MX record",
     "action": "~/.ipv6rs/appliances/stalwart/config.json"
@@ -186,7 +186,7 @@
   {
     "title": "Gitea",
     "short": "gitea",
-    "version": 3,
+    "version": 4,
     "description": "Gitea is a git repository. They have begun ActivityPub integration.\n\nThe future of social git is ActivityPub.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/gitea/config.json"
