@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM docker.io/library/ubuntu:22.04
 LABEL maintainer="ipv6rs"
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
