@@ -1,10 +1,10 @@
-FROM docker.io/library/ubuntu:22.04
+FROM docker.io/library/ubuntu:24.04
 LABEL maintainer="ipv6rs"
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && \
     apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends netcat cron apt-transport-https wireguard-tools iproute2 ca-certificates openssl openssh-server openresolv unattended-upgrades curl systemd && \
+    apt-get install -y --no-install-recommends netcat-openbsd cron apt-transport-https wireguard-tools iproute2 ca-certificates openssl openssh-server unattended-upgrades curl systemd && \
     rm -f /lib/systemd/system/multi-user.target.wants/* \
     /etc/systemd/system/*.wants/* \
     /lib/systemd/system/local-fs.target.wants/* \
@@ -14,7 +14,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     /lib/systemd/system/curl systemd-update-utmp*
 
 
-RUN apt install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" sudo curl ca-certificates gnupg jq lsb-release openssl sqlite3 xxd coreutils fuse-overlayfs && \
+RUN apt install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" sudo curl ca-certificates gnupg jq lsb-release openssl sqlite3 xxd coreutils fuse-overlayfs make wget && \
     PLATFORM="$(uname --hardware-platform || true)" && \
     DISTRIB_CODENAME="$(lsb_release --codename --short || true)" && \
     DISTRIB_ID="$(lsb_release --id --short | tr '[:upper:]' '[:lower:]' || true)" && \
@@ -26,6 +26,16 @@ RUN apt install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--f
     apt install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" containerd.io docker-ce docker-ce-cli docker-compose-plugin && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN wget --content-disposition https://github.com/NetworkConfiguration/openresolv/releases/download/v3.13.2/openresolv-3.13.2.tar.xz && \
+    tar -xvf openresolv-*.tar.xz && \
+    cd openresolv-* && \
+    ./configure && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf openresolv-*.tar.xz && \
+    rm -rf openresolv-*
 
 COPY root.sh /.root.sh
 COPY target.sh /.target.sh

@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=8
+TARGET_VERSION=9
 
 paperless_consumption_link=$(cat <<'EOF'
 #!/bin/bash
@@ -110,7 +110,38 @@ cd /opt/paperless/src && sudo -Hu paperless python3 manage.py createsuperuser
 EOF
 )
 
-systemctl enable --now redis-server
+redis_systemd_service=$(cat <<EOF
+[Unit]
+Description=Advanced key-value store
+After=network.target
+Documentation=http://redis.io/documentation, man:redis-server(1)
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/redis-server /etc/redis/redis.conf
+ExecStop=/bin/kill -s TERM \$MAINPID
+PIDFile=/run/redis/redis-server.pid
+TimeoutStopSec=0
+Restart=always
+User=redis
+Group=redis
+RuntimeDirectory=redis
+RuntimeDirectoryMode=2755
+
+UMask=007
+PrivateTmp=yes
+LimitNOFILE=65535
+ProtectHome=yes
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/var/lib/redis
+ReadWriteDirectories=-/var/log/redis
+ReadWriteDirectories=-/run/redis
+
+[Install]
+WantedBy=multi-user.target
+Alias=redis.service
+EOF
+)
 
 sudo -u postgres psql -c "CREATE USER paperless WITH PASSWORD '$DBPASSWORD';"
 sudo -u postgres psql -c "CREATE DATABASE paperless;"
@@ -120,14 +151,16 @@ sudo -u postgres psql -d paperless -c "GRANT ALL ON SCHEMA public TO paperless;"
 echo "$paperless_conf" > /opt/paperless/paperless.conf
 chown paperless:paperless /opt/paperless/paperless.conf
 
-su - paperless -c "PATH=\"/opt/paperless/.local/bin:$PATH\" && cd /opt/paperless && pip3 install --upgrade pip && pip3 install -r requirements.txt && cd src && python3 manage.py migrate"
+su - paperless -c "PATH=\"/opt/paperless/.local/bin:$PATH\" && cd /opt/paperless && pip3 install --upgrade pip --break-system-packages && pip3 install -r requirements.txt --break-system-packages && cd src && python3 manage.py migrate"
 
 sed -i 's\<policy domain="coder" rights="none" pattern="PDF" />\<policy domain="coder" rights="read|write" pattern="PDF" />\' /etc/ImageMagick-6/policy.xml
 
 cp /opt/paperless/scripts/*.service /etc/systemd/system/
 sed -i 's/\bcelery\b/\/opt\/paperless\/.local\/bin\/celery/g' /etc/systemd/system/paperless-task-queue.service
 sed -i 's/\bcelery\b/\/opt\/paperless\/.local\/bin\/celery/g' /etc/systemd/system/paperless-scheduler.service
+echo "$redis_systemd_service" > /etc/systemd/system/redis-server.service
 systemctl daemon-reload
+systemctl enable --now redis-server
 systemctl enable --now paperless-consumer
 systemctl enable --now paperless-scheduler
 systemctl enable --now paperless-task-queue
@@ -145,7 +178,7 @@ echo "$paperless_nginx_temp" > /etc/nginx/sites-available/paperless.conf
 ln -s /etc/nginx/sites-available/paperless.conf /etc/nginx/sites-enabled/paperless.conf
 
 curl --max-time 2 http://$SERVERNAME
-certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME
+certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 rm /etc/nginx/sites-enabled/paperless.conf
 echo "$paperless_nginx" > /etc/nginx/sites-available/paperless.conf
 ln -s /etc/nginx/sites-available/paperless.conf /etc/nginx/sites-enabled/paperless.conf

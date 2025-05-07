@@ -1,10 +1,10 @@
-FROM docker.io/library/ubuntu:22.04
+FROM docker.io/library/ubuntu:24.04
 LABEL maintainer="ipv6rs"
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && \
     apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends netcat cron apt-transport-https wireguard-tools iproute2 ca-certificates openssl openssh-server openresolv unattended-upgrades curl systemd && \
+    apt-get install -y --no-install-recommends netcat-openbsd cron apt-transport-https wireguard-tools iproute2 ca-certificates openssl openssh-server unattended-upgrades curl systemd && \
     rm -f /lib/systemd/system/multi-user.target.wants/* \
     /etc/systemd/system/*.wants/* \
     /lib/systemd/system/local-fs.target.wants/* \
@@ -14,9 +14,8 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     /lib/systemd/system/curl systemd-update-utmp*
 
 RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
+    apt update && \
     echo "11" | apt install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" git sudo nginx ca-certificates wget curl gnupg certbot python3 build-essential python3-certbot-nginx protobuf-compiler gcc ffmpeg exiftool libgexiv2-dev && \
-    wget -O /usr/share/keyrings/postgresql.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc && \
-    echo "deb [signed-by=/usr/share/keyrings/postgresql.asc] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/postgresql.list && \
     sudo mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
@@ -27,9 +26,9 @@ RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
     bash /root/imei.sh && \
     rm /root/imei.sh
 
-RUN adduser --disabled-password --gecos "" --system --disabled-login --group lemmy && \
+RUN adduser --disabled-password --gecos "" --system --disabled-login --home /opt/lemmy --group lemmy && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
-    bash -c ". "$HOME/.cargo/env" && cd /root && git clone https://github.com/LemmyNet/lemmy.git lemmy && cd lemmy && git checkout 0.19.3 && git submodule init && git submodule update --recursive --remote && echo \"pub const VERSION: &str = \\\"$(git describe --tag)\\\";\" > \"crates/utils/src/version.rs\" && cargo build --release --features embed-pictrs"
+    bash -c ". "$HOME/.cargo/env" && cd /root && git clone https://github.com/LemmyNet/lemmy.git lemmy && cd lemmy && git checkout 0.19.11 &&  git clone https://github.com/LemmyNet/lemmy-translations.git crates/utils/translations && cd crates/utils/translations && git checkout 70a2384b595c17dfe2096419cd1b381f638ced9a && cd /root/lemmy && echo \"pub const VERSION: &str = \\\"$(git describe --tag)\\\";\" > "crates/utils/src/version.rs" && cargo build --release --features embed-pictrs"
 
 RUN mkdir -p /opt/lemmy && \
     mkdir /opt/lemmy/lemmy-server && \
@@ -39,11 +38,21 @@ RUN mkdir -p /opt/lemmy && \
     mkdir /opt/lemmy/pictrs/old && \
     cp /root/lemmy/target/release/lemmy_server /opt/lemmy/lemmy-server/lemmy_server && \
     chown -R lemmy:lemmy /opt/lemmy/ && \
-    npm i -g yarn && \
+    npm i -g pnpm && \
     cd /opt/lemmy && \
-    sudo -u lemmy bash -c "git clone https://github.com/LemmyNet/lemmy-ui.git --recursive && cd lemmy-ui && git checkout 0.19.3 && yarn install && yarn build:prod" && \
+    sudo -u lemmy bash -c "git clone https://github.com/LemmyNet/lemmy-ui.git --recursive && cd lemmy-ui && git checkout 0.19.11 && echo \"export const VERSION = '$(git describe --tag)';\" > "src/shared/version.ts" && pnpm i && pnpm build:prod" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN wget --content-disposition https://github.com/NetworkConfiguration/openresolv/releases/download/v3.13.2/openresolv-3.13.2.tar.xz && \
+    tar -xvf openresolv-*.tar.xz && \
+    cd openresolv-* && \
+    ./configure && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf openresolv-*.tar.xz && \
+    rm -rf openresolv-*
 
 COPY root.sh /.root.sh
 COPY target.sh /.target.sh

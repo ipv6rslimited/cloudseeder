@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=5
+TARGET_VERSION=6
 
 stalwart_nginx_temp=$(cat <<EOF
 server {
@@ -57,7 +57,7 @@ echo "$stalwart_nginx_temp" > /etc/nginx/sites-available/stalwart.conf
 ln -s /etc/nginx/sites-available/stalwart.conf /etc/nginx/sites-enabled/stalwart.conf
 
 curl --max-time 2 http://$SERVERNAME
-certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME
+certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 rm /etc/nginx/sites-enabled/stalwart.conf
 echo "$stalwart_nginx" > /etc/nginx/sites-available/stalwart.conf
 ln -s /etc/nginx/sites-available/stalwart.conf /etc/nginx/sites-enabled/stalwart.conf

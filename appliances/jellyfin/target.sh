@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=10
+TARGET_VERSION=11
 
 CONFIG=$(cat <<EOF
 <VirtualHost *:80>
@@ -37,7 +37,7 @@ EOF
 
 mkdir -p /var/www/html
 systemctl stop apache2
-certbot certonly --standalone --agree-tos --email $EMAIL --preferred-challenges http --expand --non-interactive --domain $SERVERNAME
+certbot certonly --standalone --agree-tos --email $EMAIL --preferred-challenges http --expand --non-interactive --domain $SERVERNAME --deploy-hook "systemctl reload apache2"
 systemctl start apache2
 sudo a2enmod proxy proxy_http ssl proxy_wstunnel remoteip http2 headers
 echo "$CONFIG" > /etc/apache2/sites-available/jellyfin.conf

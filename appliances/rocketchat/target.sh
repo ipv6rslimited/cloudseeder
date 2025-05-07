@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=7
+TARGET_VERSION=8
 
 rocketchat_nginx_temp=$(cat <<EOF
 server {
@@ -94,7 +94,7 @@ echo "$rocketchat_nginx_temp" > /etc/nginx/sites-available/rocketchat.conf
 ln -s /etc/nginx/sites-available/rocketchat.conf /etc/nginx/sites-enabled/rocketchat.conf
 
 curl --max-time 2 http://$SERVERNAME
-certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME
+certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 rm /etc/nginx/sites-enabled/rocketchat.conf
 echo "$rocketchat_nginx" > /etc/nginx/sites-available/rocketchat.conf
 ln -s /etc/nginx/sites-available/rocketchat.conf /etc/nginx/sites-enabled/rocketchat.conf

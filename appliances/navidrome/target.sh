@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=3
+TARGET_VERSION=4
 
 navidrome_nginx_temp=$(cat <<EOF
 server {
@@ -118,7 +118,7 @@ echo "$navidrome_nginx_temp" > /etc/nginx/sites-available/navidrome.conf
 ln -s /etc/nginx/sites-available/navidrome.conf /etc/nginx/sites-enabled/navidrome.conf
 
 curl --max-time 2 http://$SERVERNAME
-certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME
+certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 rm /etc/nginx/sites-enabled/navidrome.conf
 echo "$navidrome_nginx" > /etc/nginx/sites-available/navidrome.conf
 ln -s /etc/nginx/sites-available/navidrome.conf /etc/nginx/sites-enabled/navidrome.conf

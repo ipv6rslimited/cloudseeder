@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=3
+TARGET_VERSION=4
 
 misskey_nginx_temp=$(cat <<EOF
 server {
@@ -95,7 +95,40 @@ id: 'aidx'
 EOF
 )
 
-systemctl enable --now redis-server
+redis_systemd_service=$(cat <<EOF
+[Unit]
+Description=Advanced key-value store
+After=network.target
+Documentation=http://redis.io/documentation, man:redis-server(1)
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/redis-server /etc/redis/redis.conf
+ExecStop=/bin/kill -s TERM \$MAINPID
+PIDFile=/run/redis/redis-server.pid
+TimeoutStopSec=0
+Restart=always
+User=redis
+Group=redis
+RuntimeDirectory=redis
+RuntimeDirectoryMode=2755
+
+UMask=007
+PrivateTmp=yes
+LimitNOFILE=65535
+ProtectHome=yes
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/var/lib/redis
+ReadWriteDirectories=-/var/log/redis
+ReadWriteDirectories=-/run/redis
+
+[Install]
+WantedBy=multi-user.target
+Alias=redis.service
+EOF
+)
+
+
 sudo -u postgres psql -c "CREATE DATABASE mk WITH ENCODING = 'UTF8';"
 sudo -u postgres psql -c "CREATE USER misskey WITH ENCRYPTED PASSWORD '$DBPASSWORD';"
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE mk TO misskey;"
@@ -104,14 +137,16 @@ sudo -u postgres psql -d mk -c "GRANT ALL ON SCHEMA public TO misskey;"
 echo "$misskey_config" > /opt/misskey/.config/default.yml
 (cd /opt/misskey && pnpm run init)
 echo "$misskey_systemd" > /etc/systemd/system/misskey.service
+echo "$redis_systemd_service" > /etc/systemd/system/redis-server.service
 systemctl daemon-reload
+systemctl enable --now redis-server
 systemctl enable --now misskey
 
 echo "$misskey_nginx_temp" > /etc/nginx/sites-available/misskey.conf
 ln -s /etc/nginx/sites-available/misskey.conf /etc/nginx/sites-enabled/misskey.conf
 
 curl --max-time 2 http://$SERVERNAME
-certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME
+certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 rm /etc/nginx/sites-enabled/misskey.conf
 echo "$misskey_nginx" > /etc/nginx/sites-available/misskey.conf
 ln -s /etc/nginx/sites-available/misskey.conf /etc/nginx/sites-enabled/misskey.conf

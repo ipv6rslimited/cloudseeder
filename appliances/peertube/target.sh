@@ -1,6 +1,39 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=2
+TARGET_VERSION=3
+
+redis_systemd_service=$(cat <<EOF
+[Unit]
+Description=Advanced key-value store
+After=network.target
+Documentation=http://redis.io/documentation, man:redis-server(1)
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/redis-server /etc/redis/redis.conf
+ExecStop=/bin/kill -s TERM \$MAINPID
+PIDFile=/run/redis/redis-server.pid
+TimeoutStopSec=0
+Restart=always
+User=redis
+Group=redis
+RuntimeDirectory=redis
+RuntimeDirectoryMode=2755
+
+UMask=007
+PrivateTmp=yes
+LimitNOFILE=65535
+ProtectHome=yes
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/var/lib/redis
+ReadWriteDirectories=-/var/log/redis
+ReadWriteDirectories=-/run/redis
+
+[Install]
+WantedBy=multi-user.target
+Alias=redis.service
+EOF
+)
 
 SECRET=$(openssl rand -hex 32)
 DBPASSWORD=$(< /dev/urandom tr -dc 'A-Za-z0-9' | head -c20)
@@ -35,12 +68,14 @@ cp /var/www/peertube/peertube-latest/support/nginx/peertube /etc/nginx/sites-ava
 sed -i "s/\${WEBSERVER_HOST}/$SERVERNAME/g" /etc/nginx/sites-available/peertube
 sed -i 's/${PEERTUBE_HOST}/127.0.0.1:9000/g' /etc/nginx/sites-available/peertube
 ln -s /etc/nginx/sites-available/peertube /etc/nginx/sites-enabled/peertube
+
+echo "$redis_systemd_service" > /etc/systemd/system/redis-server.service
 systemctl enable --now nginx
 systemctl enable --now redis-server
 systemctl enable --now postgresql
 
 systemctl stop nginx
-certbot certonly --standalone --agree-tos --email $EMAIL --preferred-challenges http --expand --non-interactive --domain $SERVERNAME
+certbot certonly --standalone --agree-tos --email $EMAIL --preferred-challenges http --expand --non-interactive --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 systemctl start nginx
 
 cp /var/www/peertube/peertube-latest/support/systemd/peertube.service /etc/systemd/system/

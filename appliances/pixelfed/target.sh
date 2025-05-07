@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=3
+TARGET_VERSION=4
 
 DBPASSWORD=$(< /dev/urandom tr -dc 'A-Za-z0-9' | head -c20)
 
@@ -42,7 +42,7 @@ server {
   location ~ \.php\$ {
     include snippets/fastcgi-php.conf;
     # With php-fpm (or other unix sockets):
-    fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+    fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
   }
   listen [::]:443 ssl ipv6only=on; # managed by Certbot
   listen 443 ssl; # managed by Certbot
@@ -210,6 +210,39 @@ puts "User creation script completed."
 EOF
 )
 
+redis_systemd_service=$(cat <<EOF
+[Unit]
+Description=Advanced key-value store
+After=network.target
+Documentation=http://redis.io/documentation, man:redis-server(1)
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/redis-server /etc/redis/redis.conf
+ExecStop=/bin/kill -s TERM \$MAINPID
+PIDFile=/run/redis/redis-server.pid
+TimeoutStopSec=0
+Restart=always
+User=redis
+Group=redis
+RuntimeDirectory=redis
+RuntimeDirectoryMode=2755
+
+UMask=007
+PrivateTmp=yes
+LimitNOFILE=65535
+ProtectHome=yes
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/var/lib/redis
+ReadWriteDirectories=-/var/log/redis
+ReadWriteDirectories=-/run/redis
+
+[Install]
+WantedBy=multi-user.target
+Alias=redis.service
+EOF
+)
+
 
 echo "$DBPASSWORD" > /root/.pixelfed_db_password
 chmod 600 /root/.pixelfed_db_password
@@ -236,8 +269,10 @@ chown pixel:pixel /var/www/html/.env
 su - pixel -c "cd /var/www/html && sudo php artisan key:generate && sudo php artisan storage:link && sudo php artisan migrate --force &&  sudo php artisan import:cities && sudo php artisan horizon:install && sudo php artisan passport:install && sudo php artisan instance:actor && sudo php artisan horizon:publish && sudo php artisan route:cache && sudo php artisan view:cache && sudo php artisan config:cache"
 
 echo "$pixelfed_systemd" > /etc/systemd/system/pixelfed.service
+echo "$redis_systemd_service" > /etc/systemd/system/redis-server.service
 (crontab -l 2>/dev/null; echo "* * * * * /usr/bin/php /usr/share/webapps/pixelfed/artisan schedule:run >> /dev/null 2>&1") | crontab -
 systemctl daemon-reload
+systemctl restart redis-server
 systemctl enable --now pixelfed
 systemctl restart pixelfed.service
 
@@ -251,7 +286,7 @@ echo "$pixelfed_nginx_temp" > /etc/nginx/sites-available/pixelfed.conf
 ln -s /etc/nginx/sites-available/pixelfed.conf /etc/nginx/sites-enabled/pixelfed.conf
 
 curl --max-time 2 http://$SERVERNAME
-certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME
+certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 rm /etc/nginx/sites-enabled/pixelfed.conf
 echo "$pixelfed_nginx" > /etc/nginx/sites-available/pixelfed.conf
 ln -s /etc/nginx/sites-available/pixelfed.conf /etc/nginx/sites-enabled/pixelfed.conf

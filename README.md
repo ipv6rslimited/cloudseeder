@@ -64,8 +64,6 @@ There will be many more appliances supported in the future. The current list is 
 
 - [Paperless-NGX](https://docs.paperless-ngx.com/)
 
-- [shrimp](https://github.com/ipv6rslimited/shrimp)
-
 - [Misskey](https://misskey-hub.net/)
 
 - [Lemmy](https://join-lemmy.org/)
@@ -73,8 +71,6 @@ There will be many more appliances supported in the future. The current list is 
 - [Pixelfed](https://pixelfed.org/)
 
 - [RocketChat](https://rocket.chat)
-
-- [Vaultwarden](https://github.com/dani-garcia/vaultwarden)
 
 - [Bluesky](https://github.com/bluesky-social/pds)
 
@@ -102,13 +98,11 @@ There will be many more appliances supported in the future. The current list is 
 
 - [Minecraft](https://www.minecraft.net/en-us)
 
-- [Funkwhale](https://funkwhale.audio)
-
 - [Navidrome](https://www.navidrome.org)
 
 - [LAMP Server](https://issues.apache.org/)
 
-- Base [Ubuntu 22.04](https://ubuntu.com/)
+- Base [Ubuntu 24.04](https://ubuntu.com/)
 
 - [*Arr](https://wiki.servarr.com) and [QBittorrent](https://qbittorrent.org)
 
@@ -149,7 +143,7 @@ All of this has only been tested on MacOS but the build should work fine in Linu
 
 - unattended security updates enabled by default for security
 
-- using battle hardened and stable ubuntu 22.04 LTS for security and compatibility
+- using battle hardened and stable ubuntu 24.04 LTS for security and compatibility
 
 - automated updates provided via tray menu
 
@@ -215,7 +209,7 @@ We are always looking for help! All contributions are subject to the Contributor
 
 ### License
 
-Copyright (c) 2024 [IPv6rs Limited <https://ipv6.rs>](https://ipv6.rs)
+Copyright (c) 2025 [IPv6rs Limited <https://ipv6.rs>](https://ipv6.rs)
 
 All Rights Reserved.
 

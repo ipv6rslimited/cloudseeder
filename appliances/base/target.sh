@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=2
+TARGET_VERSION=3
 
 
 echo "$TARGET_VERSION" > "${TARGET_MARKER}"

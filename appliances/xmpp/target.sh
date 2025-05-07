@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=2
+TARGET_VERSION=3
 
 prosody_cfg_lua=$(cat <<EOF
 admins = { "$ADMIN" }
@@ -103,7 +103,7 @@ curl --max-time 2 http://conference.$SERVERNAME
 curl --max-time 2 http://upload.$SERVERNAME
 curl --max-time 2 http://proxy.$SERVERNAME
 curl --max-time 2 http://turn.$SERVERNAME
-certbot certonly --standalone --agree-tos --email $EMAIL --preferred-challenges http --expand --non-interactive --domain $SERVERNAME --domain conference.$SERVERNAME --domain upload.$SERVERNAME --domain proxy.$SERVERNAME --domain turn.$SERVERNAME
+certbot certonly --standalone --agree-tos --email $EMAIL --preferred-challenges http --expand --non-interactive --domain $SERVERNAME --domain conference.$SERVERNAME --domain upload.$SERVERNAME --domain proxy.$SERVERNAME --domain turn.$SERVERNAME --deploy-hook "systemctl reload prosody"
 systemctl enable prosody
 systemctl start prosody
 setfacl -R -m u:prosody:rx /etc/letsencrypt/

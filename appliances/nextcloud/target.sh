@@ -1,13 +1,13 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=2
+TARGET_VERSION=3
 
 php_ini=$(cat <<EOF
-upload_max_filesize = 64M 
-post_max_size = 96M 
-memory_limit = 512M 
+upload_max_filesize = 64M
+post_max_size = 96M
+memory_limit = 512M
 max_execution_time = 600
-max_input_vars = 3000 
+max_input_vars = 3000
 max_input_time = 1000
 
 opcache.enable=1
@@ -40,8 +40,8 @@ php_apache_config=$(cat <<EOF
   Require all granted
 </Directory>
 
-<FilesMatch ".php$"> 
-  SetHandler "proxy:unix:/var/run/php/php8.1-fpm.sock|fcgi://localhost/"          
+<FilesMatch ".php$">
+  SetHandler "proxy:unix:/var/run/php/php8.3-fpm.sock|fcgi://localhost/"
 </FilesMatch>
 EOF
 )
@@ -67,6 +67,39 @@ redis.session.lock_wait_time=10000
 EOF
 )
 
+redis_systemd_service=$(cat <<EOF
+[Unit]
+Description=Advanced key-value store
+After=network.target
+Documentation=http://redis.io/documentation, man:redis-server(1)
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/redis-server /etc/redis/redis.conf
+ExecStop=/bin/kill -s TERM \$MAINPID
+PIDFile=/run/redis/redis-server.pid
+TimeoutStopSec=0
+Restart=always
+User=redis
+Group=redis
+RuntimeDirectory=redis
+RuntimeDirectoryMode=2755
+
+UMask=007
+PrivateTmp=yes
+LimitNOFILE=65535
+ProtectHome=yes
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/var/lib/redis
+ReadWriteDirectories=-/var/log/redis
+ReadWriteDirectories=-/run/redis
+
+[Install]
+WantedBy=multi-user.target
+Alias=redis.service
+EOF
+)
+
 
 DBPASSWORD=$(< /dev/urandom tr -dc 'A-Za-z0-9' | head -c20)
 echo "$DBPASSWORD" > /root/.nextcloud_db_password
@@ -84,14 +117,17 @@ mysql -u root -e "
 sed -i "/\ \ \ \ 0 => 'localhost',/a \ \ \ \ 1 => '$SERVERNAME'," /var/www/nextcloud/config/config.php
 sed -i "/\ \ ),/a \ \ 'memcache.local' => '\\\OC\\\Memcache\\\APCu'," /var/www/nextcloud/config/config.php
 sed -i -e '/^[[:space:]]*#/d' -e 's|/var/www/html|/var/www/nextcloud|g' /etc/apache2/sites-enabled/000-default.conf
-a2dismod php8.1
+a2dismod php8.3
 a2dismod mpm_prefork
 a2enmod mpm_event proxy_fcgi setenvif
-a2enconf php8.1-fpm
-echo "$php_ini" >> /etc/php/8.1/fpm/php.ini
-echo "$www_conf" >> /etc/php/8.1/fpm/pool.d/www.conf
+a2enconf php8.3-fpm
+echo "$php_ini" >> /etc/php/8.3/fpm/php.ini
+echo "$www_conf" >> /etc/php/8.3/fpm/pool.d/www.conf
 awk -v var="$php_apache_config" '/\/var\/www\/nextcloud/ { print; print var; next }1' /etc/apache2/sites-enabled/000-default.conf > /root/temp.temp && mv /root/temp.temp /etc/apache2/sites-enabled/000-default.conf
 mkdir -p /var/run/redis
+
+echo "$redis_systemd_service" > /etc/systemd/system/redis-server.service
+systemctl daemon-reload
 systemctl start redis-server
 systemctl enable redis-server
 sed -i "/port 6379/c\port 0\nunixsocket /var/run/redis/redis.sock\nunixsocketperm 770" /etc/redis/redis.conf
@@ -107,10 +143,10 @@ chown www-data:www-data /var/www/nextcloud/config/config.php
 sudo -u www-data php --define apc.enable_cli=1 /var/www/nextcloud/occ maintenance:update:htaccess
 mkdir -p /var/run/php
 
-systemctl restart php8.1-fpm
+systemctl restart php8.3-fpm
 systemctl restart apache2
 
-certbot --apache --agree-tos --email $EMAIL --redirect --expand --non-interactive --apache-server-root /etc/apache2/ --domain $SERVERNAME
+certbot --apache --agree-tos --email $EMAIL --redirect --expand --non-interactive --apache-server-root /etc/apache2/ --domain $SERVERNAME --deploy-hook "systemctl reload apache2"
 
 echo "$TARGET_VERSION" > "${TARGET_MARKER}"
 chattr +i "${TARGET_MARKER}"

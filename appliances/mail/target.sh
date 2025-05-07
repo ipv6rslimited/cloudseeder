@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=2
+TARGET_VERSION=3
 
 postfix_main_cf=$(cat <<EOF
 # See /usr/share/postfix/main.cf.dist for a commented, more complete version
@@ -524,10 +524,10 @@ EOF
 DEBIAN_FRONTEND=noninteractive
 echo "postfix postfix/mailname string $MAILDOMAIN" | sudo debconf-set-selections
 echo "postfix postfix/main_mailer_type string 'Internet Site'" | sudo debconf-set-selections
+apt update
 apt install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" postfix postfix-mysql postfix-policyd-spf-python opendkim opendkim-tools spamassassin spamc
 
-curl --max-time 2 http://$MAILSERVER
-certbot certonly --standalone --agree-tos --email $EMAIL --preferred-challenges http --expand --non-interactive --domain $MAILSERVER
+certbot certonly --standalone --agree-tos --email $EMAIL --preferred-challenges http --expand --non-interactive --domain $MAILSERVER --deploy-hook "systemctl reload postfix; systemctl reload dovecot"
 DBPASSWORD=$(< /dev/urandom tr -dc 'A-Za-z0-9' | head -c20)
 echo "$DBPASSWORD" > /root/.email_db_password
 chmod 600 /root/.email_db_password
@@ -591,10 +591,10 @@ echo "$dovecot_conf_d_10_master_conf" > /etc/dovecot/conf.d/10-master.conf
 echo "$dovecot_conf_d_10_ssl_conf" > /etc/dovecot/conf.d/10-ssl.conf
 systemctl restart dovecot
 adduser --disabled-password --gecos "" spamd
-echo "$default_spamassassin" > /etc/default/spamassassin
+echo "$default_spamassassin" > /etc/default/spamd
 echo "$spamassassin_local_cf" > /etc/spamassassin/local.cf
-systemctl start spamassassin
-systemctl enable spamassassin
+systemctl start spamd
+systemctl enable spamd
 systemctl restart postfix
 gpasswd -a postfix opendkim
 echo "$opendkim_conf" > /etc/opendkim.conf

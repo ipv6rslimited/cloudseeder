@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=2
+TARGET_VERSION=3
 
 
 lemmy_nginx_temp=$(cat <<EOF
@@ -179,7 +179,6 @@ WorkingDirectory=/opt/lemmy
 # Hardening
 ProtectSystem=yes
 PrivateTmp=true
-MemoryDenyWriteExecute=true
 NoNewPrivileges=true
 
 [Install]
@@ -202,13 +201,14 @@ systemctl enable --now lemmy-ui
 
 echo "$lemmy_nginx_temp" > /etc/nginx/sites-available/lemmy.conf
 ln -s /etc/nginx/sites-available/lemmy.conf /etc/nginx/sites-enabled/lemmy.conf
+systemctl reload nginx
 
 curl --max-time 2 http://$SERVERNAME
-certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME
+certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 rm /etc/nginx/sites-enabled/lemmy.conf
 echo "$lemmy_nginx" > /etc/nginx/sites-available/lemmy.conf
 ln -s /etc/nginx/sites-available/lemmy.conf /etc/nginx/sites-enabled/lemmy.conf
-sed -i -e "s/{{domain}}/$SERVERNAME/g" /etc/nginx/sites-enabled/lemmy.conf
+sed -i -e "s/{{domain}}/$SERVERNAME/g" /etc/nginx/sites-available/lemmy.conf
 
 systemctl reload nginx
 

@@ -2,7 +2,7 @@
   {
     "title": "Mastodon",
     "short": "mastodon",
-    "version": 2,
+    "version": 3,
     "description": "Mastodon is the most popular ActivityPub fediverse implementation.\n\nIt is compatible with Meta's Threads.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/mastodon/config.json"
@@ -10,7 +10,7 @@
   {
     "title": "Ollama OpenWeb-UI",
     "short": "ollamaweb",
-    "version": 17,
+    "version": 18,
     "description": "Ollama and OpenWeb-UI gives you an AI LLM to chat with locally and remotely.\n\nChat confidentially without a middleman.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP\n- Ollama running on the host computer\n- OLLAMA_HOST set to 0.0.0.0\n- See https://github.com/ollama/ollama/blob/main/docs/faq.md#how-do-i-configure-ollama-server",
     "action": "~/.ipv6rs/appliances/ollamaweb/config.json"
@@ -18,7 +18,7 @@
   {
     "title": "Nextcloud",
     "short": "nextcloud",
-    "version": 2,
+    "version": 3,
     "description": "Nextcloud is an all-in-one self-hosted Cloud Drive, Cloud Office.\n\nReally, Cloud Everything.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/nextcloud/config.json"
@@ -26,7 +26,7 @@
   {
     "title": "code-server",
     "short": "codeserver",
-    "version": 8,
+    "version": 9,
     "description": "code-server by coder.com is VS Code in your browser.\n\nCode from anywhere, on any device - even tablets.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/codeserver/config.json"
@@ -34,7 +34,7 @@
   {
     "title": "Wordpress",
     "short": "wordpress",
-    "version": 2,
+    "version": 3,
     "description": "Wordpress is the most popular blogging platform.\n\nIt powers the majority of the web.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/wordpress/config.json"
@@ -42,7 +42,7 @@
   {
     "title": "Ghost",
     "short": "ghost",
-    "version": 15,
+    "version": 16,
     "description": "Ghost is a new age blogging and newsletter subscription platform.\n\nMake money writing.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/ghost/config.json"
@@ -50,23 +50,15 @@
   {
     "title": "Paperless-NGX",
     "short": "paperless",
-    "version": 8,
+    "version": 9,
     "description": "Paperless-NGX is a document management system that makes it easy to scan, search and organize your documents, digitally.\n\nSave the trees!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/paperless/config.json"
   },
   {
-    "title": "Shrimp Proxy",
-    "short": "shrimpproxy",
-    "version": 2,
-    "description": "Shrimp Proxy gives you a proxy that routes through your IPv6rs connection.\n\nProxy for yourself or for others.",
-    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
-    "action": "~/.ipv6rs/appliances/shrimpproxy/config.json"
-  },
-  {
     "title": "Misskey",
     "short": "misskey",
-    "version": 3,
+    "version": 4,
     "description": "Misskey is one of the most popular ActivityPub softwares in the world\n\nParticipate in the fediverse!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/misskey/config.json"
@@ -74,7 +66,7 @@
   {
     "title": "Lemmy",
     "short": "lemmy",
-    "version": 2,
+    "version": 3,
     "description": "Lemmy is a federated social link aggregator, social network and voting platform.\n\nBreak free of centralization!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/lemmy/config.json"
@@ -82,7 +74,7 @@
   {
     "title": "Pixelfed",
     "short": "pixelfed",
-    "version": 3,
+    "version": 4,
     "description": "Pixelfed is a federated social photo sharing platform, much like your favorite gram type of site.\n\nNow you can't get deplatformed.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/pixelfed/config.json"
@@ -90,23 +82,15 @@
   {
     "title": "RocketChat",
     "short": "rocketchat",
-    "version": 7,
+    "version": 8,
     "description": "RocketChat is a team chat that is self-hosted and truly private.\n\nWhy would you want a rich organization who could execute your ideas looking at your ideas?",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/rocketchat/config.json"
   },
   {
-    "title": "Vaultwarden",
-    "short": "vaultwarden",
-    "version": 2,
-    "description": "Vaultwarden is a password manager that you can self host. It is powered by Bitwarden and is the unofficial rust implementation thereof.\n\nKeep your passwords with you.",
-    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
-    "action": "~/.ipv6rs/appliances/vaultwarden/config.json"
-  },
-  {
     "title": "Bluesky",
     "short": "bluesky",
-    "version": 2,
+    "version": 3,
     "description": "Bluesky is a federated social networking system using the AT protocol.\n\nThis is for advanced users only.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP\n\n- Runs in privileged mode!",
     "action": "~/.ipv6rs/appliances/bluesky/config.json"
@@ -114,7 +98,7 @@
   {
     "title": "Mail",
     "short": "mail",
-    "version": 2,
+    "version": 3,
     "description": "E-mail server powered by Postfix and Dovecot, the leading Mail systems.\n\nSend and receive e-mail.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP\n- MX record",
     "action": "~/.ipv6rs/appliances/mail/config.json"
@@ -122,7 +106,7 @@
   {
     "title": "Stalwart Mail",
     "short": "stalwart",
-    "version": 5,
+    "version": 6,
     "description": "E-mail server powered by Stalwart, a 21st century mail system.\n\nTry the new way of running an email server.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP\n- MX record",
     "action": "~/.ipv6rs/appliances/stalwart/config.json"
@@ -130,7 +114,7 @@
   {
     "title": "Jellyfin",
     "short": "jellyfin",
-    "version": 10,
+    "version": 11,
     "description": "Jellyfin helps you access your home media library from anywhere.\n\nWatch what you want, when you want, where you want.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/jellyfin/config.json"
@@ -138,7 +122,7 @@
   {
     "title": "PeerTube",
     "short": "peertube",
-    "version": 2,
+    "version": 3,
     "description": "PeerTube let's you run your own *Tube in the decentralized and federated internet.\n\nDon't get deplatformed while building your viewerbase.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/peertube/config.json"
@@ -146,7 +130,7 @@
   {
     "title": "Immich",
     "short": "immich",
-    "version": 5,
+    "version": 6,
     "description": "Immich is a self hosted Images/Photos platform by Alex Tran. This is the Native install by arter97\n\nIt's powerful.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/immich/config.json"
@@ -154,7 +138,7 @@
   {
     "title": "Planka",
     "short": "planka",
-    "version": 10,
+    "version": 11,
     "description": "A Kanban style To Do board that's completely open source.\n\nDon't trust your data with a third party todo provider.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/planka/config.json"
@@ -162,7 +146,7 @@
   {
     "title": "TheLounge",
     "short": "thelounge",
-    "version": 2,
+    "version": 3,
     "description": "TheLounge is a web based IRC client. IRC is a decentralized, federated chat protocol.\n\nChat with friends, old and new!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/thelounge/config.json"
@@ -170,7 +154,7 @@
   {
     "title": "XMPP",
     "short": "xmpp",
-    "version": 2,
+    "version": 3,
     "description": "XMPP, also known as Jabber, is a federated and decentralized messaging platform.\n\nChat privately with your group.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record for conference.*, upload.*, turn.*, proxy.* and the domain itself pointed to your IPv6rs IP\n- DNS A record for the same pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/xmpp/config.json"
@@ -178,7 +162,7 @@
   {
     "title": "YaCy",
     "short": "yacy",
-    "version": 2,
+    "version": 3,
     "description": "YaCy ios a decentralized, peer to peer search engine without a central authority.\n\nSay goodbye to censorship.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/yacy/config.json"
@@ -186,7 +170,7 @@
   {
     "title": "Gitea",
     "short": "gitea",
-    "version": 4,
+    "version": 5,
     "description": "Gitea is a git repository. They have begun ActivityPub integration.\n\nThe future of social git is ActivityPub.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/gitea/config.json"
@@ -194,7 +178,7 @@
   {
     "title": "Gitlab",
     "short": "gitlab",
-    "version": 2,
+    "version": 3,
     "description": "Gitlab is a software repository and foundry. This is their community edition.\n\nLiberate your codebase.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/gitlab/config.json"
@@ -202,23 +186,15 @@
   {
     "title": "Minecraft",
     "short": "minecraft",
-    "version": 2,
+    "version": 3,
     "description": "Minecraft is a popular game where you can build and play with friends.\n\nThis is their server that lets you do just that.",
     "requirements": "Requires:\n\n- Minecraft game.",
     "action": "~/.ipv6rs/appliances/minecraft/config.json"
   },
   {
-    "title": "Funkwhale",
-    "short": "funkwhale",
-    "version": 2,
-    "description": "Funkwhale is an ActivityPub powered music sharing platform. You can host your own music without a third party deplatforming you.\n\nPeer to peer is the way to go.",
-    "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
-    "action": "~/.ipv6rs/appliances/funkwhale/config.json"
-  },
-  {
     "title": "Navidrome",
     "short": "navidrome",
-    "version": 3,
+    "version": 4,
     "description": "Navidrome gives you access to your home music library anywhere and from any device.\n\nListen under your direction.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/navidrome/config.json"
@@ -226,23 +202,23 @@
   {
     "title": "LAMP",
     "short": "lamp",
-    "version": 2,
-    "description": "LAMP, or Linux Apache, MySQL, PHP, server appliance running Ubuntu 22.04 LTS.\n\nBuild on!",
+    "version": 3,
+    "description": "LAMP, or Linux Apache, MySQL, PHP, server appliance running Ubuntu 24.04 LTS.\n\nBuild on!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration",
     "action": "~/.ipv6rs/appliances/lamp/config.json"
   },
   {
     "title": "Base",
     "short": "base",
-    "version": 2,
-    "description": "Vanilla server appliance running Ubuntu 22.04 LTS.\n\nIt's the most popular Linux Desktop OS!",
+    "version": 3,
+    "description": "Vanilla server appliance running Ubuntu 24.04 LTS.\n\nIt's the most popular Linux Desktop OS!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration",
     "action": "~/.ipv6rs/appliances/base/config.json"
   },
   {
     "title": "*Arr + QBittorrent",
     "short": "arr",
-    "version": 2,
+    "version": 3,
     "description": "*Arr is a Media Organizer. QBittorrent is a Torrent Downloader.\n\nTogether, you have hands free media management.",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs Gateway's IP.\n\nDo NOT use this software for anything you are not authorized to do. You are responsible for proper use of this software and any results thereof.",
     "action": "~/.ipv6rs/appliances/arr/config.json"
@@ -250,7 +226,7 @@
   {
     "title": "Miniflux",
     "short": "miniflux",
-    "version": 2,
+    "version": 3,
     "description": "Miniflux is a self-hosted RSS feed reader.\n\nStay up to date with all your favorite feeds!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/miniflux/config.json"
@@ -258,7 +234,7 @@
   {
     "title": "Nostr",
     "short": "nostr",
-    "version": 2,
+    "version": 3,
     "description": "Nostr is endorsed by Jack Dorsey. It allows you to send simple notes, but creates a powerful ecosystem.\n\nOur deploy of nostr-rs-relay is configured so only you can post!",
     "requirements": "Requires:\n\n- IPv6rs WG Configuration\n- DNS AAAA record pointed to your IPv6rs IP\n- DNS A record pointed to your IPv6rs gateway IP",
     "action": "~/.ipv6rs/appliances/nostr/config.json"

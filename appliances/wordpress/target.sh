@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=2
+TARGET_VERSION=3
 
 cat <<EOF | sudo tee /etc/apache2/sites-available/wordpress.conf
 <VirtualHost *:80>
@@ -48,7 +48,7 @@ sed -i '/NONCE_SALT/d' /srv/www/wordpress/wp-config.php
 printf '%s\n' "/<?php/a" "$WP_KEYS" "." w | ed -s /srv/www/wordpress/wp-config.php
 curl -4 --max-time 2 http://$SERVERNAME
 curl -4 --max-time 2 http://$SERVERALIAS
-certbot --apache --agree-tos --email $EMAIL --redirect --expand --non-interactive --apache-server-root /etc/apache2/ --domain $SERVERNAME --domain $SERVERALIAS
+certbot --apache --agree-tos --email $EMAIL --redirect --expand --non-interactive --apache-server-root /etc/apache2/ --domain $SERVERNAME --domain $SERVERALIAS --deploy-hook "systemctl reload apache2"
 
 echo "$TARGET_VERSION" > "${TARGET_MARKER}"
 chattr +i "${TARGET_MARKER}"

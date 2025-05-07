@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=17
+TARGET_VERSION=18
 
 openwebui_nginx_temp=$(cat <<EOF
 server {
@@ -17,6 +17,10 @@ EOF
 )
 
 openwebui_nginx=$(cat <<EOF
+map \$http_upgrade \$connection_upgrade {
+        default upgrade;
+        '' close;
+}
 server {
   if (\$host = $SERVERNAME) {
     return 301 https://\$host\$request_uri;
@@ -47,6 +51,10 @@ server {
   proxy_set_header X-Forwarded-Proto \$scheme;
   proxy_set_header X-Forwarded-Protocol \$scheme;
   proxy_set_header X-Forwarded-Host \$http_host;
+  proxy_http_version 1.1;
+  proxy_set_header Upgrade \$http_upgrade;
+  proxy_set_header Connection \$connection_upgrade;
+
   proxy_buffering off;
   }
 }
@@ -73,10 +81,11 @@ Description=OpenWebUI
 After=network.target
 
 [Service]
-User=root        
+Environment="PATH=/app/backend/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+User=root
 Group=root
 WorkingDirectory=/app/backend
-ExecStart=sh start.sh
+ExecStart=bash start.sh
 Restart=always
 
 [Install]
@@ -86,15 +95,14 @@ EOF
 
 echo "$openwebui_nginx_temp" > /etc/nginx/sites-available/openwebui.conf
 ln -s /etc/nginx/sites-available/openwebui.conf /etc/nginx/sites-enabled/openwebui.conf
-  
+
 curl --max-time 2 http://$SERVERNAME
-certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME
+certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 rm /etc/nginx/sites-enabled/openwebui.conf
-echo "$openwebui_nginx" > /etc/nginx/sites-available/openwebui.conf   
+echo "$openwebui_nginx" > /etc/nginx/sites-available/openwebui.conf
 ln -s /etc/nginx/sites-available/openwebui.conf /etc/nginx/sites-enabled/openwebui.conf
-  
+
 systemctl reload nginx
-systemctl daemon-reload
 
 echo "$openwebui_config" > /app/.env
 
@@ -102,7 +110,11 @@ echo "$openwebui_config" > /app/.env
  npm i &&
  npm run build &&
  cd backend &&
- pip install -r requirements.txt -U)
+ python3 -m venv venv &&
+ source venv/bin/activate &&
+ pip install -r requirements.txt -U &&
+ deactivate)
+
 echo "$openwebui_systemd" > /etc/systemd/system/openwebui.service
 systemctl daemon-reload 
 systemctl enable openwebui.service

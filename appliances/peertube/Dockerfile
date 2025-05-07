@@ -1,10 +1,10 @@
-FROM docker.io/library/ubuntu:22.04
+FROM docker.io/library/ubuntu:24.04
 LABEL maintainer="ipv6rs"
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && \
     apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends netcat cron apt-transport-https wireguard-tools iproute2 ca-certificates openssl openssh-server openresolv unattended-upgrades curl systemd && \
+    apt-get install -y --no-install-recommends netcat-openbsd cron apt-transport-https wireguard-tools iproute2 ca-certificates openssl openssh-server unattended-upgrades curl systemd && \
     rm -f /lib/systemd/system/multi-user.target.wants/* \
     /etc/systemd/system/*.wants/* \
     /lib/systemd/system/local-fs.target.wants/* \
@@ -14,10 +14,11 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     /lib/systemd/system/curl systemd-update-utmp*
 
 RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
+    apt update && \
     echo "11" | apt install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" python3 python3-dev python-is-python3 curl sudo unzip vim ca-certificates gnupg nginx certbot ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git cron wget gnupg build-essential && \
     mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list && \
     yes | DEBIAN_FRONTEND=noninteractive apt-get update -y && \
     apt-get install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" nodejs && \
     npm install --global yarn && \
@@ -25,7 +26,7 @@ RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
     chmod 755 /var/www/peertube && \
     sudo -u peertube mkdir /var/www/peertube/config /var/www/peertube/storage /var/www/peertube/versions && \
     sudo -u peertube chmod 750 /var/www/peertube/config && \
-    VERSION="v6.0.4" && \
+    VERSION="v7.1.1" && \
     (cd /var/www/peertube/versions && \
      sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
      sudo -u peertube unzip -q peertube-${VERSION}.zip && \
@@ -36,6 +37,16 @@ RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
      sudo -H -u peertube yarn install --production --pure-lockfile) && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN wget --content-disposition https://github.com/NetworkConfiguration/openresolv/releases/download/v3.13.2/openresolv-3.13.2.tar.xz && \
+    tar -xvf openresolv-*.tar.xz && \
+    cd openresolv-* && \
+    ./configure && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf openresolv-*.tar.xz && \
+    rm -rf openresolv-*
 
 COPY root.sh /.root.sh
 COPY target.sh /.target.sh

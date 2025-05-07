@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=2
+TARGET_VERSION=3
 
 mkadmin=$(cat <<EOF
 #!/bin/bash
@@ -64,6 +64,50 @@ server {
 EOF
 )
 
+miniflux_systemd_service=$(cat <<EOF
+[Unit]
+Description=Miniflux
+Documentation=man:miniflux(1) https://miniflux.app/docs/index.html
+After=network.target postgresql.service
+
+[Service]
+ExecStart=/usr/bin/miniflux
+User=miniflux
+
+# Load environment variables from /etc/miniflux.conf.
+EnvironmentFile=/etc/miniflux.conf
+
+# Miniflux uses sd-notify protocol to notify about it's readiness.
+Type=notify
+
+# Enable watchdog.
+WatchdogSec=60s
+WatchdogSignal=SIGKILL
+
+# Automatically restart Miniflux if it crashes.
+Restart=always
+RestartSec=5
+
+# Allocate a directory at /run/miniflux for Unix sockets.
+RuntimeDirectory=miniflux
+
+# Allow Miniflux to bind to privileged ports.
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+
+# Make the system tree read-only.
+ProtectSystem=strict
+
+# Allocate a separate /tmp.
+PrivateTmp=yes
+
+# Ensure the service can never gain new privileges.
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+)
+
 
 DBPASSWORD=$(< /dev/urandom tr -dc 'A-Za-z0-9' | head -c20)
 echo "$DBPASSWORD" > /root/.miniflux_db_password
@@ -80,13 +124,16 @@ EOF
 
 echo "DATABASE_URL=postgres://miniflux:$DBPASSWORD@127.0.0.1/miniflux?sslmode=disable" >> /etc/miniflux.conf
 
+echo "$miniflux_systemd_service" > /usr/lib/systemd/system/miniflux.service
+
+systemctl daemon-reload
 systemctl start miniflux
 
 echo "$miniflux_nginx_temp" > /etc/nginx/sites-available/miniflux.conf
 ln -s /etc/nginx/sites-available/miniflux.conf /etc/nginx/sites-enabled/miniflux.conf
 
 curl --max-time 2 http://$SERVERNAME
-certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME
+certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 rm /etc/nginx/sites-enabled/miniflux.conf
 echo "$miniflux_nginx" > /etc/nginx/sites-available/miniflux.conf
 ln -s /etc/nginx/sites-available/miniflux.conf /etc/nginx/sites-enabled/miniflux.conf

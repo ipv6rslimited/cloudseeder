@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=2
+TARGET_VERSION=3
 
 
 make_admin=$(cat <<'EOF'
@@ -57,6 +57,39 @@ SESSION_RETENTION_PERIOD=31556952
 EOF
 )
 
+redis_systemd_service=$(cat <<EOF
+[Unit]
+Description=Advanced key-value store
+After=network.target
+Documentation=http://redis.io/documentation, man:redis-server(1)
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/redis-server /etc/redis/redis.conf
+ExecStop=/bin/kill -s TERM \$MAINPID
+PIDFile=/run/redis/redis-server.pid
+TimeoutStopSec=0
+Restart=always
+User=redis
+Group=redis
+RuntimeDirectory=redis
+RuntimeDirectoryMode=2755
+
+UMask=007
+PrivateTmp=yes
+LimitNOFILE=65535
+ProtectHome=yes
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/var/lib/redis
+ReadWriteDirectories=-/var/log/redis
+ReadWriteDirectories=-/run/redis
+
+[Install]
+WantedBy=multi-user.target
+Alias=redis.service
+EOF
+)
+
 systemctl start postgresql
 su - postgres -c "psql -c \"CREATE USER mastodon CREATEDB;\""
 echo "$env_production" >  /home/mastodon/live/.env.production
@@ -67,7 +100,7 @@ su - mastodon -c "cd /home/mastodon/live && PATH=\"\$HOME/.rbenv/bin:\$HOME/.rbe
 su - mastodon -c "PATH=\"\$HOME/.rbenv/bin:\$HOME/.rbenv/plugins/ruby-build/bin:\$PATH\" cd live && PATH=\"\$HOME/.rbenv/bin:\$HOME/.rbenv/shims/:\$HOME/.rbenv/plugins/ruby-build/bin:\$PATH\" RAILS_ENV=production ./bin/rails db:setup && PATH=\"\$HOME/.rbenv/bin:\$HOME/.rbenv/shims/:\$HOME/.rbenv/plugins/ruby-build/bin:\$PATH\" RAILS_ENV=production ./bin/rails assets:precompile"
 systemctl stop nginx
 curl --max-time 2 http://$SERVERNAME
-certbot certonly --standalone --agree-tos --email $EMAIL --preferred-challenges http --expand --non-interactive --domain $SERVERNAME
+certbot certonly --standalone --agree-tos --email $EMAIL --preferred-challenges http --expand --non-interactive --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 systemctl start nginx
 cp /home/mastodon/live/dist/nginx.conf /etc/nginx/sites-available/mastodon
 ln -s /etc/nginx/sites-available/mastodon /etc/nginx/sites-enabled/mastodon
@@ -77,7 +110,10 @@ sed -i 's/^\s*#\s*\(ssl_certificate\|ssl_certificate_key\)/\1/' /etc/nginx/sites
 systemctl restart nginx
 cp /home/mastodon/live/dist/mastodon-*.service /etc/systemd/system/
 chmod 0755 /home/mastodon
+
+echo "$redis_systemd_service" > /etc/systemd/system/redis-server.service
 systemctl daemon-reload
+systemctl enable --now redis-server
 systemctl enable --now mastodon-web mastodon-sidekiq mastodon-streaming
 echo "$make_admin" > /root/make_admin.sh
 chmod u+x /root/make_admin.sh

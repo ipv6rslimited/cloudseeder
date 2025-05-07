@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=8
+TARGET_VERSION=9
 
 codeserver_nginx_temp=$(cat <<EOF
 server {
@@ -60,7 +60,7 @@ echo "$codeserver_nginx_temp" > /etc/nginx/sites-available/codeserver.conf
 ln -s /etc/nginx/sites-available/codeserver.conf /etc/nginx/sites-enabled/codeserver.conf
  
 curl --max-time 2 http://$SERVERNAME
-certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME
+certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 rm /etc/nginx/sites-enabled/codeserver.conf
 echo "$codeserver_nginx" > /etc/nginx/sites-available/codeserver.conf
 ln -s /etc/nginx/sites-available/codeserver.conf /etc/nginx/sites-enabled/codeserver.conf

@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=2
+TARGET_VERSION=3
 
 nostr_nginx_temp=$(cat <<EOF
 server {
@@ -298,7 +298,7 @@ echo "$nostr_nginx_temp" > /etc/nginx/sites-available/nostr.conf
 ln -s /etc/nginx/sites-available/nostr.conf /etc/nginx/sites-enabled/nostr.conf
    
 curl --max-time 2 http://$SERVERNAME
-certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME
+certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 rm /etc/nginx/sites-enabled/nostr.conf
 echo "$nostr_nginx" > /etc/nginx/sites-available/nostr.conf
 ln -s /etc/nginx/sites-available/nostr.conf /etc/nginx/sites-enabled/nostr.conf

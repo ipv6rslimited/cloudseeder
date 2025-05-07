@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=5
+TARGET_VERSION=6
 
 # This package is powered by github.com/arter97/immich-native
 
@@ -42,7 +42,7 @@ server {
   ssl_stapling_verify on;
 
   location / {
-  proxy_pass http://127.0.0.1:3001/;
+  proxy_pass http://127.0.0.1:2283/;
   proxy_set_header Host \$host;
   proxy_set_header X-Real-IP \$remote_addr;
   proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
@@ -65,17 +65,17 @@ Documentation=https://github.com/immich-app/immich
 Requires=redis-server.service
 Requires=postgresql.service
 Requires=immich-machine-learning.service
-Requires=immich.service
 
 [Service]
 User=immich
 Group=immich
 Type=simple
 Restart=on-failure
+UMask=0077
 
 WorkingDirectory=/var/lib/immich/app
 EnvironmentFile=/var/lib/immich/env
-ExecStart=node /var/lib/immich/app/dist/main immich
+ExecStart=node /var/lib/immich/app/dist/main
 
 SyslogIdentifier=immich
 StandardOutput=append:/var/log/immich/immich.log
@@ -96,6 +96,7 @@ User=immich
 Group=immich
 Type=simple
 Restart=on-failure
+UMask=0077
 
 WorkingDirectory=/var/lib/immich/app
 EnvironmentFile=/var/lib/immich/env
@@ -110,56 +111,53 @@ WantedBy=multi-user.target
 EOF
 )
 
-immich_microservices_service=$(cat <<'EOF'
-[Unit]
-Description=immich microservices
-Documentation=https://github.com/immich-app/immich
-Requires=redis-server.service
-Requires=postgresql.service
-
-[Service]
-User=immich
-Group=immich
-Type=simple
-Restart=on-failure
-
-WorkingDirectory=/var/lib/immich/app
-EnvironmentFile=/var/lib/immich/env
-ExecStart=node /var/lib/immich/app/dist/main microservices
-
-SyslogIdentifier=immich-microservices
-StandardOutput=append:/var/log/immich/immich-microservices.log
-StandardError=append:/var/log/immich/immich-microservices.log
-
-[Install]
-WantedBy=multi-user.target
-EOF
-)
-
 install_script=$(cat <<'SCRIPTEOF'
 #!/bin/bash
 
 set -xeuo pipefail
 
-TAG=v1.105.1
+REV=v1.126.1
 
 IMMICH_PATH=/var/lib/immich
 APP=$IMMICH_PATH/app
 
 BASEDIR=$(dirname "$0")
+umask 077
 
-rm -rf $APP
+rm -rf $APP $APP/../i18n
 mkdir -p $APP
 
 # Wipe npm, pypoetry, etc
 # This expects immich user's home directory to be on $IMMICH_PATH/home
 rm -rf $IMMICH_PATH/home
 mkdir -p $IMMICH_PATH/home
+echo 'umask 077' > $IMMICH_PATH/home/.bashrc
 
 TMP=/tmp/immich-$(uuidgen)
-git clone https://github.com/immich-app/immich $TMP
+if [[ $REV =~ ^[0-9A-Fa-f]+$ ]]; then
+  # REV is a full commit hash, full clone is required
+  git clone https://github.com/immich-app/immich $TMP
+else
+  git clone https://github.com/immich-app/immich $TMP --depth=1 -b $REV
+fi
 cd $TMP
-git reset --hard $TAG
+git reset --hard $REV
+rm -rf .git
+
+# Use 127.0.0.1
+find . -type f \( -name '*.ts' -o -name '*.js' \) -exec grep app.listen {} + | \
+  sed 's/.*app.listen//' | grep -v '()' | grep '^(' | \
+  tr -d "[:blank:]" | awk -F"[(),]" '{print $2}' | sort | uniq | while read port; do
+    find . -type f \( -name '*.ts' -o -name '*.js' \) -exec sed -i -e "s@app.listen(${port})@app.listen(${port}, '127.0.0.1')@g" {} +
+done
+find . -type f \( -name '*.ts' -o -name '*.js' \) -exec sed -i -e "s@PrometheusExporter({ port })@PrometheusExporter({ host: '127.0.0.1', port: port })@g" {} +
+grep -RlE "\"0\.0\.0\.0\"|'0\.0\.0\.0'" | xargs -n1 sed -i -e "s@'0\.0\.0\.0'@'127.0.0.1'@g" -e 's@"0\.0\.0\.0"@"127.0.0.1"@g'
+
+# Replace /usr/src
+grep -Rl /usr/src | xargs -n1 sed -i -e "s@/usr/src@$IMMICH_PATH@g"
+mkdir -p $IMMICH_PATH/cache
+grep -RlE "\"/cache\"|'/cache'" | xargs -n1 sed -i -e "s@\"/cache\"@\"$IMMICH_PATH/cache\"@g" -e "s@'/cache'@'$IMMICH_PATH/cache'@g"
+grep -RlE "\"/build\"|'/build'" | xargs -n1 sed -i -e "s@\"/build\"@\"$APP\"@g" -e "s@'/build'@'$APP'@g"
 
 # immich-server
 cd server
@@ -183,6 +181,7 @@ cp -a web/build $APP/www
 cp -a server/resources server/package.json server/package-lock.json $APP/
 cp -a server/start*.sh $APP/
 cp -a LICENSE $APP/
+cp -a i18n $APP/../
 cd $APP
 npm cache clean --force
 cd -
@@ -195,32 +194,29 @@ python3 -m venv $APP/machine-learning/venv
   . $APP/machine-learning/venv/bin/activate
   pip3 install poetry
   cd machine-learning
-  # pip install poetry
-  max_attempts=5
-  attempt=1
-  while [ $attempt -le $max_attempts ]; do
-    echo "Attempt $attempt of $max_attempts: Installing dependencies..."
-    set +e
-    poetry install --no-root --with dev --with cpu && break || echo "Attempt failed, retrying in 10 seconds..."
-    set -e
-    sleep 10
-    attempt=$((attempt + 1))
-  done
-
-  if [ $attempt -gt $max_attempts ]; then
-    echo "Failed to install dependencies after $max_attempts attempts."
-    exit 1
-  fi
+  poetry install --no-root --with dev --with cpu
   cd ..
 )
-cp -a machine-learning/ann machine-learning/start.sh machine-learning/app $APP/machine-learning/
 
-# Replace /usr/src
-cd $APP
-grep -Rl /usr/src | xargs -n1 sed -i -e "s@/usr/src@$IMMICH_PATH@g"
-ln -sf $IMMICH_PATH/app/resources $IMMICH_PATH/
-mkdir -p $IMMICH_PATH/cache
-sed -i -e "s@\"/cache\"@\"$IMMICH_PATH/cache\"@g" $APP/machine-learning/app/config.py
+cp -a \
+  machine-learning/ann \
+  machine-learning/start.sh \
+  machine-learning/log_conf.json \
+  machine-learning/gunicorn_conf.py \
+  machine-learning/app \
+    $APP/machine-learning/
+
+# Install GeoNames
+mkdir -p $APP/geodata
+cd $APP/geodata
+wget -o - https://download.geonames.org/export/dump/admin1CodesASCII.txt &
+wget -o - https://download.geonames.org/export/dump/admin2Codes.txt &
+wget -o - https://download.geonames.org/export/dump/cities500.zip &
+wget -o - https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_admin_0_countries.geojson &
+wait
+unzip cities500.zip
+date --iso-8601=seconds | tr -d "\n" > geodata-date.txt
+rm cities500.zip
 
 # Install sharp
 cd $APP
@@ -230,9 +226,7 @@ npm install sharp
 mkdir -p $IMMICH_PATH/upload
 ln -s $IMMICH_PATH/upload $APP/
 ln -s $IMMICH_PATH/upload $APP/machine-learning/
-
-# Use 127.0.0.1
-sed -i -e "s@app.listen(port)@app.listen(port, '127.0.0.1')@g" $APP/dist/main.js
+chown -R immich:immich $IMMICH_PATH/upload
 
 # Custom start.sh script
 cat <<EOF > $APP/start.sh
@@ -256,25 +250,28 @@ set +a
 cd $APP/machine-learning
 . venv/bin/activate
 
-: "\${MACHINE_LEARNING_HOST:=127.0.0.1}"
-: "\${MACHINE_LEARNING_PORT:=3003}"
+: "\${IMMICH_HOST:=127.0.0.1}"
+: "\${IMMICH_PORT:=3003}"
 : "\${MACHINE_LEARNING_WORKERS:=1}"
-: "\${MACHINE_LEARNING_WORKER_TIMEOUT:=120}"
+: "\${MACHINE_LEARNING_HTTP_KEEPALIVE_TIMEOUT_S:=2}"
+: "\${MACHINE_LEARNING_WORKER_TIMEOUT:=300}"
 
 exec gunicorn app.main:app \
-        -k app.config.CustomUvicornWorker \
-        -w "\$MACHINE_LEARNING_WORKERS" \
-        -b "\$MACHINE_LEARNING_HOST":"\$MACHINE_LEARNING_PORT" \
-        -t "\$MACHINE_LEARNING_WORKER_TIMEOUT" \
-        --log-config-json log_conf.json \
-        --graceful-timeout 0
+  -k app.config.CustomUvicornWorker \
+  -c gunicorn_conf.py \
+  -b "\$IMMICH_HOST":"\$IMMICH_PORT" \
+  -w "\$MACHINE_LEARNING_WORKERS" \
+  -t "\$MACHINE_LEARNING_WORKER_TIMEOUT" \
+  --log-config-json log_conf.json \
+  --keep-alive "\$MACHINE_LEARNING_HTTP_KEEPALIVE_TIMEOUT_S" \
+  --graceful-timeout 0
 EOF
 
 # Cleanup
 rm -rf $TMP
 
 echo
-echo "Done. Please install the systemd services to start using Immich."
+echo "Done."
 echo
 SCRIPTEOF
 )
@@ -301,35 +298,67 @@ UPLOAD_LOCATION=./library
 IMMICH_VERSION=release
 
 # Hosts & ports
+IMMICH_HOST=127.0.0.1
 DB_HOSTNAME=127.0.0.1
-MACHINE_LEARNING_HOST=127.0.0.1
 IMMICH_MACHINE_LEARNING_URL=http://127.0.0.1:3003
 REDIS_HOSTNAME=127.0.0.1
 EOF
 )
 
+redis_systemd_service=$(cat <<EOF
+[Unit]
+Description=Advanced key-value store
+After=network.target
+Documentation=http://redis.io/documentation, man:redis-server(1)
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/redis-server /etc/redis/redis.conf
+ExecStop=/bin/kill -s TERM \$MAINPID
+PIDFile=/run/redis/redis-server.pid
+TimeoutStopSec=0
+Restart=always
+User=redis
+Group=redis
+RuntimeDirectory=redis
+RuntimeDirectoryMode=2755
+
+UMask=007
+PrivateTmp=yes
+LimitNOFILE=65535
+ProtectHome=yes
+ReadOnlyDirectories=/
+ReadWriteDirectories=-/var/lib/redis
+ReadWriteDirectories=-/var/log/redis
+ReadWriteDirectories=-/run/redis
+
+[Install]
+WantedBy=multi-user.target
+Alias=redis.service
+EOF
+)
+
 echo "$env_file" > /var/lib/immich/env
 chown immich:immich /var/lib/immich/env
-sudo -u postgres psql -c "CREATE DATABASE immich;" -c "CREATE USER immich WITH ENCRYPTED PASSWORD '$DBPASSWORD';" -c "GRANT ALL PRIVILEGES ON DATABASE immich TO immich;" -c "ALTER USER immich WITH SUPERUSER;"
-npm install -g npm@10.5.2
+sudo -u postgres psql -c "CREATE DATABASE immich;" -c "CREATE USER immich WITH ENCRYPTED PASSWORD '$DBPASSWORD';" -c "GRANT ALL PRIVILEGES ON DATABASE immich TO immich;" -c "ALTER USER immich WITH SUPERUSER;" -c "CREATE EXTENSION IF NOT EXISTS vector;"
 echo "$install_script" > /tmp/install.sh
 chmod 0755 /tmp/install.sh
 sudo -u immich bash -c "/tmp/install.sh"
 rm /tmp/install.sh
 echo "$immich_machine_learning_service" > /etc/systemd/system/immich-machine-learning.service
-echo "$immich_microservices_service" > /etc/systemd/system/immich-microservices.service
 echo "$immich_service" > /etc/systemd/system/immich.service
+echo "$redis_systemd_service" > /etc/systemd/system/redis-server.service
 
 systemctl daemon-reload
+systemctl restart redis-server.service
 systemctl enable --now immich-machine-learning.service
-systemctl enable --now immich-microservices.service
 systemctl enable --now immich.service
 
 echo "$immich_nginx_temp" > /etc/nginx/sites-available/immich.conf
 ln -s /etc/nginx/sites-available/immich.conf /etc/nginx/sites-enabled/immich.conf
 
 curl --max-time 2 http://$SERVERNAME
-certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME
+certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 rm /etc/nginx/sites-enabled/immich.conf
 echo "$immich_nginx" > /etc/nginx/sites-available/immich.conf
 ln -s /etc/nginx/sites-available/immich.conf /etc/nginx/sites-enabled/immich.conf

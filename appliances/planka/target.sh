@@ -1,6 +1,6 @@
 #!/bin/bash
 TARGET_MARKER="/root/.targetonce"
-TARGET_VERSION=10
+TARGET_VERSION=11
 
 
 planka_nginx_temp=$(cat <<EOF
@@ -141,7 +141,7 @@ echo "$planka_nginx_temp" > /etc/nginx/sites-available/planka.conf
 ln -s /etc/nginx/sites-available/planka.conf /etc/nginx/sites-enabled/planka.conf
 
 curl --max-time 2 http://$SERVERNAME
-certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME
+certbot --nginx --agree-tos --email $EMAIL --redirect --expand --non-interactive --nginx-server-root /etc/nginx/ --domain $SERVERNAME --deploy-hook "systemctl reload nginx"
 rm /etc/nginx/sites-enabled/planka.conf
 echo "$planka_nginx" > /etc/nginx/sites-available/planka.conf
 ln -s /etc/nginx/sites-available/planka.conf /etc/nginx/sites-enabled/planka.conf

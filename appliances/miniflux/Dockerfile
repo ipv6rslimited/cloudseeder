@@ -1,10 +1,10 @@
-FROM docker.io/library/ubuntu:22.04
+FROM docker.io/library/ubuntu:24.04
 LABEL maintainer="ipv6rs"
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y && \
     apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends netcat cron apt-transport-https wireguard-tools iproute2 ca-certificates openssl openssh-server openresolv unattended-upgrades curl systemd && \
+    apt-get install -y --no-install-recommends netcat-openbsd cron apt-transport-https wireguard-tools iproute2 ca-certificates openssl openssh-server unattended-upgrades curl systemd && \
     rm -f /lib/systemd/system/multi-user.target.wants/* \
     /etc/systemd/system/*.wants/* \
     /lib/systemd/system/local-fs.target.wants/* \
@@ -14,7 +14,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     /lib/systemd/system/curl systemd-update-utmp*
 
 RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
-    echo "11" | apt install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" ed git sudo wget sudo tzdata nginx ca-certificates curl certbot python3 python3-certbot-nginx && \
+    echo "11" | apt install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" ed git sudo wget sudo tzdata nginx ca-certificates curl certbot python3 python3-certbot-nginx make && \
     wget -O /usr/share/keyrings/postgresql.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc && \
     echo "deb [signed-by=/usr/share/keyrings/postgresql.asc] http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/postgresql.list && \
     yes | DEBIAN_FRONTEND=noninteractive apt-get update -y && \
@@ -24,6 +24,16 @@ RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
     apt-get install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" miniflux && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN wget --content-disposition https://github.com/NetworkConfiguration/openresolv/releases/download/v3.13.2/openresolv-3.13.2.tar.xz && \
+    tar -xvf openresolv-*.tar.xz && \
+    cd openresolv-* && \
+    ./configure && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf openresolv-*.tar.xz && \
+    rm -rf openresolv-*
 
 COPY root.sh /.root.sh
 COPY target.sh /.target.sh

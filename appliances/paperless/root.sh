@@ -1,6 +1,6 @@
 #!/bin/bash
 INIT_MARKER="/root/.runonce"
-SCRIPT_VERSION=1
+SCRIPT_VERSION=2
 
 ipv6rs_timer=$(cat <<EOF
 [Unit]
@@ -143,7 +143,7 @@ initial_setup() {
   bash -c /.target.sh
   rm /.target.sh
 
-  systemctl disable sshd.service
+  systemctl disable ssh.service
   mkdir /var/run/sshd
   sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
   sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
