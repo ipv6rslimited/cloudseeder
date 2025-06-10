@@ -14,6 +14,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     /lib/systemd/system/curl systemd-update-utmp*
 
 RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
+    apt-get update && \
     echo "11" | apt install -yq -o "DPkg::Options::=--force-confold" -o "DPkg::Options::=--force-confdef" wget sudo tzdata ca-certificates curl nginx certbot python3 python3-certbot-nginx make && \
     curl --proto '=https' --tlsv1.2 -sSf https://get.stalw.art/install.sh -o /root/install.sh && \
     apt-get clean && \
